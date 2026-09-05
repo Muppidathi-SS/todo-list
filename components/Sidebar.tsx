@@ -1,12 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SideTabs } from "@/constants/navigation";
 import ColorPaletteModal from "./ColorPaletteModal";
 
 export default function Sidebar() {
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<string>("Search");
+  const [themeColor, setThemeColor] = useState<string>("#ff6b4a");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("themeColor");
+    if (!saved) {
+      localStorage.setItem("themeColor", "#ff6b4a");
+    } else {
+      setThemeColor(saved);
+    }
+  }, [isColorPaletteOpen]);
 
   return (
     <>
@@ -23,10 +33,16 @@ export default function Sidebar() {
                 if (item.label === "Appearance") setIsColorPaletteOpen(true);
               }}
               className={`w-full flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer ${
-                isSelected
-                  ? "bg-red-200/30 text-red-600"
-                  : "bg-transparent text-gray-700"
+                isSelected ? "bg-transparent" : "text-gray-700"
               }`}
+              style={
+                isSelected
+                  ? {
+                      backgroundColor: `${themeColor}30`,
+                      color: themeColor,
+                    }
+                  : undefined
+              }
             >
               <Icon fontSize="small" />
               <span>{item.label}</span>

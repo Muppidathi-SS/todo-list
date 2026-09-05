@@ -14,17 +14,19 @@ export default function ColorPaletteModal({
   onClose,
   onSelectColor,
 }: ColorPaletteModalProps) {
-  const [color, setColor] = useState<string>("#ffffff");
+  const [color, setColor] = useState<string>("#ff6b4a");
 
   useEffect(() => {
     if (isOpen) {
-      setColor("#ffffff");
+      const savedColor = localStorage.getItem("themeColor") || "#ff6b4a";
+      setColor(savedColor);
     }
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   const handleOkay = () => {
+    localStorage.setItem("themeColor", color);
     console.log("Selected Color:", color);
     if (onSelectColor) {
       onSelectColor(color);
