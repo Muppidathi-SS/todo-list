@@ -18,5 +18,5 @@ export const SideTabs: SideTabItem[] = [
   { label: "Upcoming", icon: CalendarMonthIcon, path: "/upcoming" },
   { label: "Filters", icon: FilterAltIcon, path: "/filters" },
   { label: "Completed", icon: LibraryAddCheckIcon, path: "/completed" },
-  { label: "Appearance", icon: ColorLensIcon },
+  { label: "Appearance", icon: ColorLensIcon, path: "/appearance" },
 ];

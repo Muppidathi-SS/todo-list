@@ -6,90 +6,52 @@ import { RootState } from "@/store/store";
 import { setThemeColor } from "@/store/slice";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 
-interface ColorPaletteModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSelectColor?: (color: string) => void;
-}
-
-export default function ColorPaletteModal({
-  isOpen,
-  onClose,
-  onSelectColor,
-}: ColorPaletteModalProps) {
+export default function ColorPaletteModal() {
   const dispatch = useDispatch();
   const themeColor = useSelector((state: RootState) => state.theme.themeColor);
   const [color, setColor] = useState<string>(themeColor);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      setColor(themeColor);
-    }
-  }, [isOpen, themeColor]);
+    setMounted(true);
+    setColor(themeColor);
+  }, [themeColor]);
 
-  if (!isOpen) return null;
+  const activeColor = mounted ? themeColor : "#ff6b4a";
 
-  const handleOkay = () => {
-    dispatch(setThemeColor(color));
-    console.log("Selected Color:", color);
-    if (onSelectColor) {
-      onSelectColor(color);
-    }
-    onClose();
+  const handleColorChange = (newColor: string) => {
+    setColor(newColor);
+    dispatch(setThemeColor(newColor));
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg border border-gray-200 dark:border-zinc-800 w-full max-w-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100 dark:border-zinc-800 flex items-center justify-between">
-          <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
-            Color Palette
-          </h3>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-gray-400 cursor-pointer text-xl leading-none"
-          >
-            &times;
-          </button>
+    <div className="flex flex-col justify-start items-center py-10 h-full w-full">
+      <h2 className="font-bold text-3xl mb-8" style={{ color: activeColor }}>
+        Appearance Settings
+      </h2>
+      <div className="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl p-8 shadow-md flex flex-col items-center gap-6 w-full max-w-md">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+          Choose Theme Color
+        </h3>
+        <div className="w-full flex justify-center [&_.react-colorful]:w-full [&_.react-colorful]:h-56">
+          <HexColorPicker color={color} onChange={handleColorChange} />
         </div>
-        <div className="p-5 flex flex-col items-center gap-5">
-          <div className="w-full flex justify-center [&_.react-colorful]:w-full [&_.react-colorful]:h-48">
-            <HexColorPicker color={color} onChange={setColor} />
-          </div>
-          <div className="w-full flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-lg border border-gray-300 dark:border-zinc-700 shrink-0"
-              style={{ backgroundColor: color }}
+        <div className="w-full flex items-center gap-4 pt-2">
+          <div
+            className="w-12 h-12 rounded-lg border border-gray-300 dark:border-zinc-600 shadow-sm shrink-0"
+            style={{ backgroundColor: color }}
+          />
+          <div className="flex-1 flex items-center gap-2 border border-gray-300 dark:border-zinc-600 rounded-md px-3 py-2 bg-gray-50 dark:bg-zinc-700">
+            <span className="text-sm font-semibold text-gray-500 dark:text-gray-300">
+              Hex:
+            </span>
+            <HexColorInput
+              color={color}
+              onChange={handleColorChange}
+              prefixed
+              className="w-full bg-transparent font-mono text-base font-medium text-gray-800 dark:text-gray-100 outline-none"
             />
-            <div className="flex-1 flex items-center gap-2 border border-gray-300 dark:border-zinc-700 rounded-md px-3 py-1.5 bg-gray-50 dark:bg-zinc-800">
-              <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                Hex:
-              </span>
-              <HexColorInput
-                color={color}
-                onChange={setColor}
-                prefixed
-                className="w-full bg-transparent font-mono text-sm font-medium text-gray-800 dark:text-gray-200 outline-none"
-              />
-            </div>
           </div>
-        </div>
-        <div className="px-5 py-3.5 bg-gray-50 dark:bg-zinc-800/50 border-t border-gray-100 dark:border-zinc-800 flex justify-end gap-2.5">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-zinc-700 rounded-md cursor-pointer"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            onClick={handleOkay}
-            className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-md cursor-pointer"
-          >
-            Okay
-          </button>
         </div>
       </div>
     </div>
