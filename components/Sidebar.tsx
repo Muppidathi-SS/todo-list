@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { SideTabs } from "@/constants/navigation";
 import ColorPaletteModal from "./ColorPaletteModal";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export default function Sidebar() {
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
@@ -21,10 +22,21 @@ export default function Sidebar() {
   return (
     <>
       <div className="w-full h-full flex flex-col gap-2">
+        <div className="w-full flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer">
+          <AddCircleIcon
+            sx={{
+              fontSize: 30,
+              color: themeColor,
+            }}
+          />
+
+          <h1 className="text-xl font-medium" style={{ color: themeColor }}>
+            Add Task
+          </h1>
+        </div>
         {SideTabs.map((item) => {
           const Icon = item.icon;
           const isSelected = selectedTab === item.label;
-
           return (
             <div
               key={item.label}
