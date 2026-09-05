@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setThemeColor } from "@/store/slice";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 
 interface ColorPaletteModalProps {
@@ -14,19 +17,20 @@ export default function ColorPaletteModal({
   onClose,
   onSelectColor,
 }: ColorPaletteModalProps) {
-  const [color, setColor] = useState<string>("#ff6b4a");
+  const dispatch = useDispatch();
+  const themeColor = useSelector((state: RootState) => state.theme.themeColor);
+  const [color, setColor] = useState<string>(themeColor);
 
   useEffect(() => {
     if (isOpen) {
-      const savedColor = localStorage.getItem("themeColor") || "#ff6b4a";
-      setColor(savedColor);
+      setColor(themeColor);
     }
-  }, [isOpen]);
+  }, [isOpen, themeColor]);
 
   if (!isOpen) return null;
 
   const handleOkay = () => {
-    localStorage.setItem("themeColor", color);
+    dispatch(setThemeColor(color));
     console.log("Selected Color:", color);
     if (onSelectColor) {
       onSelectColor(color);

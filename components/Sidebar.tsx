@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 import { SideTabs } from "@/constants/navigation";
 import ColorPaletteModal from "./ColorPaletteModal";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -8,29 +10,27 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 export default function Sidebar() {
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<string>("Search");
-  const [themeColor, setThemeColor] = useState<string>("#ff6b4a");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("themeColor");
-    if (!saved) {
-      localStorage.setItem("themeColor", "#ff6b4a");
-    } else {
-      setThemeColor(saved);
-    }
-  }, [isColorPaletteOpen]);
+    setMounted(true);
+  }, []);
+
+  const themeColor = useSelector((state: RootState) => state.theme.themeColor);
+  const activeColor = mounted ? themeColor : "#ff6b4a";
 
   return (
     <>
       <div className="w-full h-full flex flex-col gap-2">
         <div className="w-full flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer">
           <AddCircleIcon
-            sx={{
+            style={{
               fontSize: 30,
-              color: themeColor,
+              color: activeColor,
             }}
           />
 
-          <h1 className="text-xl font-medium" style={{ color: themeColor }}>
+          <h1 className="text-xl font-medium" style={{ color: activeColor }}>
             Add Task
           </h1>
         </div>
@@ -50,8 +50,8 @@ export default function Sidebar() {
               style={
                 isSelected
                   ? {
-                      backgroundColor: `${themeColor}30`,
-                      color: themeColor,
+                      backgroundColor: `${activeColor}30`,
+                      color: activeColor,
                     }
                   : undefined
               }
