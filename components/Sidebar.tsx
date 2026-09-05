@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useRouter, usePathname } from "next/navigation";
 import { RootState } from "@/store/store";
-import { SideTabs } from "@/constants/navigation";
+import { SideTabs, SideTabItem } from "@/constants/navigation";
 import ColorPaletteModal from "./ColorPaletteModal";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export default function Sidebar() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<string>("Search");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -19,10 +22,24 @@ export default function Sidebar() {
   const themeColor = useSelector((state: RootState) => state.theme.themeColor);
   const activeColor = mounted ? themeColor : "#ff6b4a";
 
+  const handleTabClick = (item: SideTabItem) => {
+    if (item.label === "Appearance") {
+      setIsColorPaletteOpen(true);
+      return;
+    }
+
+    if (item.path) {
+      router.push(item.path);
+    }
+  };
+
   return (
     <>
       <div className="w-full h-full flex flex-col gap-2">
-        <div className="w-full flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer">
+        <div
+          onClick={() => router.push("/today")}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer"
+        >
           <AddCircleIcon
             style={{
               fontSize: 30,
@@ -36,16 +53,19 @@ export default function Sidebar() {
         </div>
         {SideTabs.map((item) => {
           const Icon = item.icon;
-          const isSelected = selectedTab === item.label;
+          const isSelected =
+            item.label === "Appearance"
+              ? isColorPaletteOpen
+              : item.path
+              ? pathname === item.path || (pathname === "/" && item.path === "/today")
+              : false;
+
           return (
             <div
               key={item.label}
-              onClick={() => {
-                setSelectedTab(item.label);
-                if (item.label === "Appearance") setIsColorPaletteOpen(true);
-              }}
+              onClick={() => handleTabClick(item)}
               className={`w-full flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer ${
-                isSelected ? "bg-transparent" : "text-gray-700"
+                isSelected ? "bg-transparent" : "text-gray-700 dark:text-gray-300"
               }`}
               style={
                 isSelected

@@ -2,6 +2,6 @@
 
 import AddBar from "@/components/AddBar";
 
-export default function Home() {
+export default function AddTask() {
   return <AddBar />;
 }
