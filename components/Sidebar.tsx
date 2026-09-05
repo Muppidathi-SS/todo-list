@@ -28,7 +28,7 @@ export default function Sidebar() {
   return (
     <div className="w-full h-full flex flex-col gap-2">
       <div
-        onClick={() => router.push("/today")}
+        onClick={() => router.push("/add-task")}
         className="w-full flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer"
       >
         <AddCircleIcon
