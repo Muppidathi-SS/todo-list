@@ -3,18 +3,19 @@
 import NotFoundIcon from "@/public/icons/NotfoundIcon";
 import { RootState } from "@/store/store";
 import { AddCircle } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { TypeAnimation } from "react-type-animation";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { TODAY_TASKS } from "@/constants/dummy-data";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 export default function AddBar() {
   const themeColor = useSelector((state: RootState) => state.theme.themeColor);
   const [checkedTaskIds, setCheckedTaskIds] = useState<(number | string)[]>([]);
-  const [taskName, setTaskName] = useState<string | "">("");
-  const [tasks, setTasks] = useState<string[] | []>([]);
+  const [taskName, setTaskName] = useState<string>("");
+  const [tasks, setTasks] = useState<string[]>([]);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
 
   const toggleTaskCheck = (id: number | string) => {
     setCheckedTaskIds((prev) =>
@@ -25,10 +26,20 @@ export default function AddBar() {
   };
 
   const handleAdd = () => {
-    console.log("CALLED");
     if (!taskName.trim()) return;
-    setTasks((prev) => [...prev, taskName]);
+    setTasks((prev) => [...prev, taskName.trim()]);
     setTaskName("");
+  };
+
+  const handleDrop = (targetIndex: number) => {
+    if (dragIndex === null || dragIndex === targetIndex) return;
+    setTasks((prev) => {
+      const updated = [...prev];
+      const [moved] = updated.splice(dragIndex, 1);
+      updated.splice(targetIndex, 0, moved);
+      return updated;
+    });
+    setDragIndex(null);
   };
 
   return (
@@ -43,7 +54,7 @@ export default function AddBar() {
             cursor={true}
           />
         </h2>
-        <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg w-250 px-3 pl-5 mt-8">
+        <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg w-200 px-3 pl-5 mt-8">
           <input
             value={taskName}
             onChange={(e) => setTaskName(e.target.value)}
@@ -76,7 +87,7 @@ export default function AddBar() {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col items-center mt-4 gap-5 cursor-pointer">
+          <div className="flex flex-col items-center mt-4 gap-5">
             <h2 className="font-medium text-3xl" style={{ color: themeColor }}>
               Today
             </h2>
@@ -86,7 +97,13 @@ export default function AddBar() {
               return (
                 <div
                   key={index}
-                  className="w-350 flex gap-3 px-5 py-4 rounded-xl border border-gray-300/20 shadow"
+                  draggable
+                  onDragStart={() => setDragIndex(index)}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => handleDrop(index)}
+                  className={`w-250 flex gap-3 px-5 py-4 rounded-xl border border-gray-300/20 shadow cursor-pointer transition-opacity ${
+                    dragIndex === index ? "opacity-40" : ""
+                  }`}
                 >
                   <div
                     onClick={() => toggleTaskCheck(index)}
@@ -101,13 +118,14 @@ export default function AddBar() {
 
                   <p
                     className={`font-normal text-[18px] ${
-                      isChecked ? "text-gray-400 line-through" : ""
+                      isChecked ? "text-gray-400" : ""
                     }`}
                   >
                     {task}
                   </p>
 
                   <p className="ml-auto text-gray-500">Just Now</p>
+                  <DragIndicatorIcon />
                 </div>
               );
             })}
