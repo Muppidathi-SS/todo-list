@@ -27,21 +27,25 @@ export const TODAY_TASKS = [
     id: 1,
     taskName:
       "Worked on removing multiple vertices in the guardrail centreline.",
+    isChecked: true,
     completedTime: "Just Now",
   },
   {
     id: 2,
     taskName: "Implemented route synchronization between Guardrail and Atlas.",
+    isChecked: true,
     completedTime: "12 Minutes ago",
   },
   {
     id: 3,
     taskName: "Fixed the selected route issue in the Guardrail filter.",
+    isChecked: false,
     completedTime: "2 Hours ago",
   },
   {
     id: 4,
     taskName: "Added validation for creating new guardrail work orders.",
+    isChecked: true,
     completedTime: "3 Hours ago",
   },
 ];

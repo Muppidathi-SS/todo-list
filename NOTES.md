@@ -1,19 +1,48 @@
-"use client";
+Add Bar Drag and Drop Functionality:
+
+<!-- "use client";
 
 import NotFoundIcon from "@/public/icons/NotfoundIcon";
 import { RootState } from "@/store/store";
 import { AddCircle } from "@mui/icons-material";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { TypeAnimation } from "react-type-animation";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-import { TODAY_TASKS } from "@/constants/dummy-data";
-import { useState } from "react";
 
 export default function AddBar() {
   const themeColor = useSelector((state: RootState) => state.theme.themeColor);
-  const [showTasks, setShowtasks] = useState(false);
+  const [checkedTaskIds, setCheckedTaskIds] = useState<(number | string)[]>([]);
+  const [taskName, setTaskName] = useState<string>("");
+  const [tasks, setTasks] = useState<string[]>([]);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+
+  const toggleTaskCheck = (id: number | string) => {
+    setCheckedTaskIds((prev) =>
+      prev.includes(id)
+        ? prev.filter((taskId) => taskId !== id)
+        : [...prev, id],
+    );
+  };
+
+  const handleAdd = () => {
+    if (!taskName.trim()) return;
+    setTasks((prev) => [...prev, taskName.trim()]);
+    setTaskName("");
+  };
+
+  const handleDrop = (targetIndex: number) => {
+    if (dragIndex === null || dragIndex === targetIndex) return;
+    setTasks((prev) => {
+      const updated = [...prev];
+      const [moved] = updated.splice(dragIndex, 1);
+      updated.splice(targetIndex, 0, moved);
+      return updated;
+    });
+    setDragIndex(null);
+  };
 
   return (
     <>
@@ -29,14 +58,16 @@ export default function AddBar() {
         </h2>
         <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg w-200 px-3 pl-5 mt-8">
           <input
+            value={taskName}
+            onChange={(e) => setTaskName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleAdd();
+            }}
             className="py-4 focus:outline-none focus:border-none w-full"
             type="text"
             placeholder="Add Task Here...."
           />
-          <button
-            onClick={() => setShowtasks((pre) => !pre)}
-            className="cursor-pointer"
-          >
+          <button onClick={handleAdd} className="cursor-pointer">
             <AddCircle
               style={{
                 fontSize: 40,
@@ -46,7 +77,7 @@ export default function AddBar() {
           </button>
         </div>
 
-        {showTasks ? (
+        {tasks.length === 0 ? (
           <div className="flex flex-col justify-center items-center gap-2 mt-50">
             <NotFoundIcon color={themeColor} />
             <h2 className="font-medium text-3xl" style={{ color: themeColor }}>
@@ -62,14 +93,25 @@ export default function AddBar() {
             <h2 className="font-medium text-3xl" style={{ color: themeColor }}>
               Today
             </h2>
-            {TODAY_TASKS.map((task, index) => {
+            {tasks.map((task, index) => {
+              const isChecked = checkedTaskIds.includes(index);
+
               return (
                 <div
                   key={index}
-                  className="w-250 flex gap-3 px-5 py-4 rounded-xl border border-gray-300/20 shadow cursor-pointer transition-opacity"
+                  draggable
+                  onDragStart={() => setDragIndex(index)}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => handleDrop(index)}
+                  className={`w-250 flex gap-3 px-5 py-4 rounded-xl border border-gray-300/20 shadow cursor-pointer transition-opacity ${
+                    dragIndex === index ? "opacity-40" : ""
+                  }`}
                 >
-                  <div className="cursor-pointer">
-                    {task.isChecked ? (
+                  <div
+                    onClick={() => toggleTaskCheck(index)}
+                    className="cursor-pointer"
+                  >
+                    {isChecked ? (
                       <CheckCircleIcon sx={{ color: "green" }} />
                     ) : (
                       <RadioButtonUncheckedIcon sx={{ color: "gray" }} />
@@ -78,12 +120,14 @@ export default function AddBar() {
 
                   <p
                     className={`font-normal text-[18px] ${
-                      task.isChecked ? "text-gray-400" : ""
+                      isChecked ? "text-gray-400" : ""
                     }`}
                   >
-                    {task.taskName}
+                    {task}
                   </p>
-                  <p className="ml-auto text-gray-500">{task.completedTime}</p>
+
+                  <p className="ml-auto text-gray-500">Just Now</p>
+                  <DragIndicatorIcon />
                 </div>
               );
             })}
@@ -92,4 +136,4 @@ export default function AddBar() {
       </div>
     </>
   );
-}
+} -->
