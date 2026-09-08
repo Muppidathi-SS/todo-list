@@ -1,7 +1,7 @@
 "use client";
 
-import ColorPaletteModal from "@/components/ColorPaletteModal";
+import Appearance from "@/components/Appearance";
 
 export default function AppearancePage() {
-  return <ColorPaletteModal />;
+  return <Appearance />;
 }
