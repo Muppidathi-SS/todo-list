@@ -9,6 +9,12 @@ import {
   Switch,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import {
+  customMenuStyles,
+  customSelectStyles,
+  customSwitchStyles,
+} from "@/styles/customStyles";
+import ColorPaletteModal from "./ColorPaletteModal";
 
 const languages = ["English", "Hindi"];
 
@@ -44,52 +50,22 @@ export default function Appearance() {
               Set your customise your preference thems
             </p>
           </div>
-          <div className="flex justify-between mt-5">
+          <div className="flex justify-between items-center mt-5">
             <div className="space-y-1">
               <h3 className="font-normal text-[18px]">Language</h3>
               <p className="text-gray-500 font-light text-[15px]">
                 Select the language of the platform
               </p>
             </div>
-            <div className="mt-4">
+            <div className="">
               <FormControl size="small" sx={{ minWidth: 160 }}>
                 <Select
                   value={language}
                   onChange={handleLanguageChange}
                   IconComponent={KeyboardArrowDownIcon}
-                  sx={{
-                    fontFamily: "var(--font-poppins)",
-                    borderRadius: "12px",
-                    color: "#1f2937",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#e5e7eb",
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#d1d5db",
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#d1d5db",
-                      borderWidth: "1px",
-                    },
-                    "& .MuiSelect-icon": {
-                      color: "#6b7280",
-                      transition: "0.2s",
-                    },
-                  }}
+                  sx={customSelectStyles}
                   MenuProps={{
-                    sx: {
-                      "& .MuiPaper-root": {
-                        borderRadius: "12px",
-                        mt: 1,
-                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                        "& .MuiList-root": {
-                          padding: 0,
-                        },
-                        "& .MuiMenuItem-root": {
-                          fontFamily: "var(--font-poppins)",
-                        },
-                      },
-                    },
+                    sx: customMenuStyles,
                   }}
                 >
                   {languages.map((lang) => (
@@ -101,53 +77,22 @@ export default function Appearance() {
               </FormControl>
             </div>
           </div>
-          <div className="flex justify-between mt-5">
+          <div className="flex justify-between items-center mt-5">
             <div className="space-y-1">
               <h3 className="font-normal text-[18px]">Theme</h3>
               <p className="text-gray-500 font-light text-[15px]">
                 Select the theme of the platform
               </p>
             </div>
-            <div className="mt-4">
+            <div className="">
               <FormControl size="small" sx={{ minWidth: 160 }}>
                 <Select
                   value={theme}
                   onChange={handleThemeChange}
                   IconComponent={KeyboardArrowDownIcon}
-                  sx={{
-                    fontFamily: "var(--font-poppins)",
-                    borderRadius: "12px",
-                    color: "#1f2937",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#e5e7eb",
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#d1d5db",
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#d1d5db",
-                      borderWidth: "1px",
-                    },
-                    "& .MuiSelect-icon": {
-                      color: "#6b7280",
-                      transition: "0.2s",
-                    },
-                  }}
+                  sx={customSelectStyles}
                   MenuProps={{
-                    sx: {
-                      "& .MuiPaper-root": {
-                        borderRadius: "12px",
-                        padding: 0,
-                        mt: 1,
-                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                        "& .MuiList-root": {
-                          padding: 0,
-                        },
-                        "& .MuiMenuItem-root": {
-                          fontFamily: "var(--font-poppins)",
-                        },
-                      },
-                    },
+                    sx: customMenuStyles,
                   }}
                 >
                   {themes.map((themse) => (
@@ -159,53 +104,22 @@ export default function Appearance() {
               </FormControl>
             </div>
           </div>
-          <div className="flex justify-between mt-5">
+          <div className="flex justify-between items-center mt-5">
             <div className="space-y-1">
               <h3 className="font-normal text-[18px]">Color</h3>
               <p className="text-gray-500 font-light text-[15px]">
                 Select the color of the platform
               </p>
             </div>
-            <div className="mt-4">
+            <div className="">
               <FormControl size="small" sx={{ minWidth: 60 }}>
                 <Select
                   value={color}
                   onChange={handleColorChange}
                   IconComponent={KeyboardArrowDownIcon}
-                  sx={{
-                    fontFamily: "var(--font-poppins)",
-                    borderRadius: "12px",
-                    color: "#1f2937",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#e5e7eb",
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#d1d5db",
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#d1d5db",
-                      borderWidth: "1px",
-                    },
-                    "& .MuiSelect-icon": {
-                      color: "#6b7280",
-                      transition: "0.2s",
-                    },
-                  }}
+                  sx={customSelectStyles}
                   MenuProps={{
-                    sx: {
-                      "& .MuiPaper-root": {
-                        borderRadius: "12px",
-                        padding: 0,
-                        mt: 1,
-                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                        "& .MuiList-root": {
-                          padding: 0,
-                        },
-                        "& .MuiMenuItem-root": {
-                          fontFamily: "var(--font-poppins)",
-                        },
-                      },
-                    },
+                    sx: customMenuStyles,
                   }}
                 >
                   {colors.map((color) => (
@@ -220,7 +134,7 @@ export default function Appearance() {
               </FormControl>
             </div>
           </div>
-          <div className="flex justify-between mt-5">
+          <div className="flex justify-between items-center mt-5">
             <div className="space-y-1">
               <h3 className="font-normal text-[18px]">Custom Color</h3>
               <p className="text-gray-500 font-light text-[15px]">
@@ -231,64 +145,14 @@ export default function Appearance() {
               <Switch
                 checked={enabled}
                 onChange={(event) => setEnabled(event.target.checked)}
-                sx={{
-                  width: 38,
-                  height: 22,
-                  padding: 0,
-
-                  "& .MuiSwitch-switchBase": {
-                    padding: 0,
-                    margin: "2px",
-                    transition: "transform 200ms ease",
-
-                    // OFF state
-                    "& + .MuiSwitch-track": {
-                      backgroundColor: "#D1D5DB",
-                      opacity: 1,
-                    },
-
-                    // ON state
-                    "&.Mui-checked": {
-                      transform: "translateX(16px)",
-                      color: "#FFFFFF",
-
-                      "& + .MuiSwitch-track": {
-                        backgroundColor: "#8BC34A",
-                        opacity: 1,
-                      },
-                    },
-
-                    // Disabled state
-                    "&.Mui-disabled": {
-                      color: "#9CA3AF",
-
-                      "& + .MuiSwitch-track": {
-                        opacity: 0.4,
-                      },
-                    },
-                  },
-
-                  // Circle
-                  "& .MuiSwitch-thumb": {
-                    width: 18,
-                    height: 18,
-                    boxSizing: "border-box",
-                    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)",
-                  },
-
-                  // Background/track
-                  "& .MuiSwitch-track": {
-                    borderRadius: "11px",
-                    backgroundColor: "#39393D",
-                    opacity: 1,
-                    transition: "background-color 200ms ease",
-                  },
-                }}
+                sx={customSwitchStyles}
               />
             </div>
-            {/* <div className="w-50">
+          </div>
+          <div className="flex justify-end">
+            <div className="w-50 mt-4">
               <ColorPaletteModal />
-            </div> */}
+            </div>
           </div>
         </div>
         <div className="space-x-2 flex justify-end mt-6">
