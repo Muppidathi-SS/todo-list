@@ -1,5 +1,5 @@
-
+import UpcomingTasks from "@/components/UpcomingTasks";
 
 export default function Upcoming() {
-  return <h1>Welcome Upcoming</h1>;
+  return <UpcomingTasks />;
 }
