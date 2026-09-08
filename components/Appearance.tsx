@@ -14,6 +14,7 @@ import {
   customSelectStyles,
   customSwitchStyles,
 } from "@/styles/customStyles";
+import ColorPaletteModal from "./ColorPaletteModal";
 
 const languages = ["English", "Hindi"];
 
@@ -147,9 +148,11 @@ export default function Appearance() {
                 sx={customSwitchStyles}
               />
             </div>
-            {/* <div className="w-50">
+          </div>
+          <div className="flex justify-end">
+            <div className="w-50 mt-4">
               <ColorPaletteModal />
-            </div> */}
+            </div>
           </div>
         </div>
         <div className="space-x-2 flex justify-end mt-6">

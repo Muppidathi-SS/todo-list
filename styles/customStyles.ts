@@ -40,8 +40,8 @@ export const customMenuStyles: SxProps<Theme> = {
 };
 
 export const customSwitchStyles: SxProps<Theme> = {
-  width: 46,
-  height: 28,
+  width: 52,
+  height: 31,
   padding: 0,
 
   "& .MuiSwitch-switchBase": {
@@ -57,7 +57,7 @@ export const customSwitchStyles: SxProps<Theme> = {
 
     // ON state
     "&.Mui-checked": {
-      transform: "translateX(16px)",
+      transform: "translateX(20px)",
       color: "#FFFFFF",
 
       "& + .MuiSwitch-track": {
@@ -78,15 +78,15 @@ export const customSwitchStyles: SxProps<Theme> = {
 
   // Circle
   "& .MuiSwitch-thumb": {
-    width: 24,
-    height: 24,
+    width: 28,
+    height: 28,
     boxSizing: "border-box",
     boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)",
   },
 
   // Background/track
   "& .MuiSwitch-track": {
-    borderRadius: "14px",
+    borderRadius: "16px",
     backgroundColor: "#39393D",
     opacity: 1,
     transition: "background-color 200ms ease",
