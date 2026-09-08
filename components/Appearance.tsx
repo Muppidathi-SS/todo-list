@@ -44,14 +44,14 @@ export default function Appearance() {
               Set your customise your preference thems
             </p>
           </div>
-          <div className="flex justify-between mt-5">
+          <div className="flex justify-between items-center mt-5">
             <div className="space-y-1">
               <h3 className="font-normal text-[18px]">Language</h3>
               <p className="text-gray-500 font-light text-[15px]">
                 Select the language of the platform
               </p>
             </div>
-            <div className="mt-4">
+            <div className="">
               <FormControl size="small" sx={{ minWidth: 160 }}>
                 <Select
                   value={language}
@@ -101,14 +101,14 @@ export default function Appearance() {
               </FormControl>
             </div>
           </div>
-          <div className="flex justify-between mt-5">
+          <div className="flex justify-between items-center mt-5">
             <div className="space-y-1">
               <h3 className="font-normal text-[18px]">Theme</h3>
               <p className="text-gray-500 font-light text-[15px]">
                 Select the theme of the platform
               </p>
             </div>
-            <div className="mt-4">
+            <div className="">
               <FormControl size="small" sx={{ minWidth: 160 }}>
                 <Select
                   value={theme}
@@ -159,14 +159,14 @@ export default function Appearance() {
               </FormControl>
             </div>
           </div>
-          <div className="flex justify-between mt-5">
+          <div className="flex justify-between items-center mt-5">
             <div className="space-y-1">
               <h3 className="font-normal text-[18px]">Color</h3>
               <p className="text-gray-500 font-light text-[15px]">
                 Select the color of the platform
               </p>
             </div>
-            <div className="mt-4">
+            <div className="">
               <FormControl size="small" sx={{ minWidth: 60 }}>
                 <Select
                   value={color}
@@ -220,7 +220,7 @@ export default function Appearance() {
               </FormControl>
             </div>
           </div>
-          <div className="flex justify-between mt-5">
+          <div className="flex justify-between items-center mt-5">
             <div className="space-y-1">
               <h3 className="font-normal text-[18px]">Custom Color</h3>
               <p className="text-gray-500 font-light text-[15px]">
@@ -232,8 +232,8 @@ export default function Appearance() {
                 checked={enabled}
                 onChange={(event) => setEnabled(event.target.checked)}
                 sx={{
-                  width: 38,
-                  height: 22,
+                  width: 46,
+                  height: 28,
                   padding: 0,
 
                   "& .MuiSwitch-switchBase": {
@@ -270,15 +270,15 @@ export default function Appearance() {
 
                   // Circle
                   "& .MuiSwitch-thumb": {
-                    width: 18,
-                    height: 18,
+                    width: 24,
+                    height: 24,
                     boxSizing: "border-box",
                     boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)",
                   },
 
                   // Background/track
                   "& .MuiSwitch-track": {
-                    borderRadius: "11px",
+                    borderRadius: "14px",
                     backgroundColor: "#39393D",
                     opacity: 1,
                     transition: "background-color 200ms ease",
