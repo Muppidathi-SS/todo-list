@@ -101,3 +101,26 @@ export const UPCOMING_DUMMY_DATA = [
     ],
   },
 ];
+
+export const POP_UP_TASKS = [
+  {
+    id: 1,
+    isCompleted: true,
+    taskName: "Work on guardrail mapping in atlas.",
+  },
+  {
+    id: 2,
+    isCompleted: true,
+    taskName: "Work on 360 button for sign module.",
+  },
+  {
+    id: 3,
+    isCompleted: false,
+    taskName: "Work on 360 button for sign module.",
+  },
+  {
+    id: 4,
+    isCompleted: false,
+    taskName: "Work on 360 button for sign module.",
+  },
+];
