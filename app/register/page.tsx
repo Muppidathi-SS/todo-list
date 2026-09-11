@@ -20,7 +20,7 @@ export default function Register() {
             className="w-auto h-auto"
           />
         </div>
-        <div className="border border-gray-100 rounded-xl shadow-2xl w-170 flex flex-col justify-center items-center px-4 py-12">
+        <div className="border border-gray-100 rounded-xl shadow-2xl w-170 flex flex-col justify-center items-center px-4 py-6">
           <h1 className="text-[32px] font-medium">Register</h1>
           <p className="text-gray-400">
             Please enter your details to explore the application!

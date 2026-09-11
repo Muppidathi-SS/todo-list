@@ -75,17 +75,21 @@ export default function Sidebar() {
           );
         })}
       </div>
-        <div className="w-full flex items-center justify-between">
-          <div className="flex justify-center items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-red-500 text-white text-[21px] flex justify-center items-center">
-              A
-            </div>
-            <span className="text-[18px]">Aadhi</span>
+      <div className="w-full flex items-center justify-between">
+        <div className="flex justify-center items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-red-500 text-white text-[21px] flex justify-center items-center">
+            A
           </div>
-          <button>
-            <LogoutIcon />{" "}
-          </button>
+          <span className="text-[18px]">Aadhi</span>
         </div>
+        <button
+          onClick={() => router.push("/login")}
+          className="cursor-pointer hover:opacity-75 transition-opacity"
+          title="Logout"
+        >
+          <LogoutIcon />{" "}
+        </button>
+      </div>
     </div>
   );
 }
