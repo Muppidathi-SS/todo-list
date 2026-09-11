@@ -38,7 +38,7 @@ export default function Completed() {
               >
                 <div className="relative h-10 w-10">
                   <div className="h-10 w-10 rounded-full bg-red-500 text-white text-[20px] flex justify-center items-center">
-                    M
+                    A
                   </div>
 
                   <CheckCircleIcon
@@ -78,7 +78,7 @@ export default function Completed() {
               >
                 <div className="relative h-10 w-10">
                   <div className="h-10 w-10 rounded-full bg-red-500 text-white text-[20px] flex justify-center items-center">
-                    M
+                    A
                   </div>
 
                   <CheckCircleIcon
@@ -118,7 +118,7 @@ export default function Completed() {
               >
                 <div className="relative h-10 w-10">
                   <div className="h-10 w-10 rounded-full bg-red-500 text-white text-[20px] flex justify-center items-center">
-                    M
+                    A
                   </div>
 
                   <CheckCircleIcon
