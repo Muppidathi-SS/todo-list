@@ -23,7 +23,8 @@ export default function MainLayout({
   const router = useRouter();
   const pathname = usePathname();
 
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage =
+    pathname === "/" || pathname === "/login" || pathname === "/register";
 
   useEffect(() => {
     if (!isLoggedIn && !isAuthPage) {
