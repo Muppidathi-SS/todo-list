@@ -16,6 +16,10 @@ export const storeSlice: Slice<StoreState> = createSlice({
       state.themeColor = action.payload;
       if (typeof window !== "undefined") {
         localStorage.setItem("themeColor", action.payload);
+        document.documentElement.style.setProperty(
+          "--theme-color",
+          action.payload,
+        );
       }
     },
   },
