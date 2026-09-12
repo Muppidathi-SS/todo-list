@@ -9,11 +9,7 @@ import { Zoom } from "react-toastify";
 import { Email, Password } from "@mui/icons-material";
 
 import { loginUser } from "@/services/auth/auth.service";
-import {
-  LOGIN_EMPTY,
-  LoginData,
-  LoginUser,
-} from "@/services/auth/auth.type";
+import { LOGIN_EMPTY, LoginData, LoginUser } from "@/services/auth/auth.type";
 import Button from "@/ui/Button";
 import Input from "@/ui/Input";
 import ShowToastify from "@/utils/ShowToastify";
@@ -30,7 +26,8 @@ export default function Login() {
     }));
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     const user: LoginUser = {
       userEmail: loginData.email,
       userPassword: loginData.password,
@@ -40,13 +37,14 @@ export default function Login() {
       if (data.user) {
         localStorage.setItem("user", JSON.stringify(data.user));
       }
+      setLoginData(LOGIN_EMPTY);
       ShowToastify({
         message: "Login Success!",
         type: "success",
         position: "top-center",
         transition: Zoom,
       });
-      router.push("/add-task");
+      router.push("/appearance");
     } catch (err) {
       ShowToastify({
         message: err instanceof Error ? err.message : "Login Failed!",
@@ -54,8 +52,6 @@ export default function Login() {
         position: "top-center",
         transition: Zoom,
       });
-    } finally {
-      setLoginData(LOGIN_EMPTY);
     }
   };
 
@@ -64,6 +60,7 @@ export default function Login() {
       <section className="bg-white min-h-svh lg:h-screen w-full flex flex-col lg:flex-row justify-center items-center px-4 sm:px-6 lg:p-0 lg:gap-20 py-4 sm:py-6 lg:py-0 overflow-y-auto">
         <form
           autoComplete="off"
+          onSubmit={handleLogin}
           className="border border-gray-100 rounded-2xl sm:rounded-xl shadow-xl sm:shadow-2xl w-full max-w-[400px] sm:max-w-[440px] lg:max-w-none lg:w-170 flex flex-col justify-center items-center px-4 py-6 sm:py-8 lg:py-12 bg-white my-auto sm:my-0"
         >
           <h1 className="text-2xl sm:text-[32px] font-medium text-center">
@@ -92,7 +89,7 @@ export default function Login() {
               autoComplete="new-password"
             />
           </div>
-          <Button onClick={handleLogin}>Login</Button>
+          <Button type="submit">Login</Button>
           <p className="py-2 sm:py-2.5 text-gray-500 text-sm sm:text-md select-none">
             or
           </p>

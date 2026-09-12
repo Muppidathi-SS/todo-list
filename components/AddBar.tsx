@@ -30,7 +30,7 @@ export default function AddBar() {
             cursor={true}
           />
         </h2>
-        <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg w-200 px-3 pl-5 mt-8">
+        <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg w-[92%] sm:w-[85%] md:w-200 max-w-full px-3 pl-5 mt-8">
           <input
             className="py-4 focus:outline-none focus:border-none w-full"
             type="text"
@@ -60,7 +60,8 @@ export default function AddBar() {
             </h2>
             <p
               style={{
-                color: "color-mix(in srgb, var(--theme-color) 80%, transparent)",
+                color:
+                  "color-mix(in srgb, var(--theme-color) 80%, transparent)",
               }}
             >
               you haven't added any tasks for today. Add a new task to get
@@ -79,7 +80,7 @@ export default function AddBar() {
               return (
                 <div
                   key={index}
-                  className="w-250 flex gap-3 px-5 py-4 rounded-xl border border-gray-300/20 shadow cursor-pointer transition-opacity"
+                  className="w-full max-w-[92%] sm:max-w-[85%] md:w-250 flex gap-3 px-5 py-4 rounded-xl border border-gray-300/20 shadow cursor-pointer transition-opacity"
                 >
                   <div className="cursor-pointer">
                     {task.isChecked ? (

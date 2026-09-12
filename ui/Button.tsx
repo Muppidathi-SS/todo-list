@@ -3,6 +3,7 @@ interface ButtonProps {
   onClick?: () => void;
   icon?: React.ReactNode;
   variant?: "primary" | "google";
+  type?: "button" | "submit" | "reset";
 }
 
 export default function Button({
@@ -10,6 +11,7 @@ export default function Button({
   onClick,
   icon,
   variant = "primary",
+  type = "button",
 }: ButtonProps) {
   const className =
     variant === "primary"
@@ -17,7 +19,7 @@ export default function Button({
       : "flex justify-center items-center border border-gray-300 shadow rounded-lg px-3 py-2 sm:py-2.5 w-[88%] sm:w-[82%] lg:w-[80%] gap-3 cursor-pointer hover:bg-gray-50 transition select-none touch-manipulation";
 
   return (
-    <button onClick={onClick} className={className}>
+    <button type={type} onClick={onClick} className={className}>
       {icon}
       <span>{children}</span>
     </button>
