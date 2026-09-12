@@ -1,134 +1,128 @@
 "use client";
 
-import { Email, Password, Person } from "@mui/icons-material";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState } from "react";
 
+import { Email, Password, Person } from "@mui/icons-material";
+
+import Input from "@/ui/Input";
+import Button from "@/ui/Button";
+import { registerUser } from "@/services/auth/auth.service";
+import { REGISTER_EMPTY, RegisterData } from "@/services/auth/auth.type";
+import ShowToastify from "@/utils/ShowToastify";
+import { Bounce, Zoom } from "react-toastify";
+
 export default function Register() {
-  const router = useRouter();
-  const [name, setName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [registerData, setRegisterData] =
+    useState<RegisterData>(REGISTER_EMPTY);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setRegisterData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleRegister = async () => {
     const user = {
-      userName: name,
-      userPassword: password,
-      userEmail: email,
+      userName: registerData.name,
+      userPassword: registerData.password,
+      userEmail: registerData.email,
     };
-    console.log("USER:", user);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
-    const data = await response.json();
-    console.log("API RESPONSE:", data);
+    try {
+      await registerUser(user);
+      ShowToastify({
+        message: "Registration successful!",
+        type: "success",
+        position: "top-center",
+        transition: Zoom,
+      });
+    } catch (err) {
+      ShowToastify({
+        message: "Registration failed!",
+        type: "error",
+        position: "top-center",
+        transition: Bounce,
+      });
+    } finally {
+      setRegisterData(REGISTER_EMPTY);
+    }
   };
 
   return (
     <>
-      <section className="bg-white h-screen w-full flex justify-center gap-20 items-center">
-        <div>
-          <Image
-            src="/auth-svg/login.svg"
-            alt="Login"
-            width={700}
-            height={700}
-            priority
-            className="w-auto h-auto"
-          />
-        </div>
-        <div className="border border-gray-100 rounded-xl shadow-2xl w-170 flex flex-col justify-center items-center px-4 py-6">
-          <h1 className="text-[32px] font-medium">Register</h1>
-          <p className="text-gray-400">
+      <section className="bg-white min-h-svh lg:h-screen w-full flex flex-col lg:flex-row justify-center items-center px-4 sm:px-6 lg:p-0 lg:gap-20 py-4 sm:py-6 lg:py-0 overflow-y-auto">
+        <div className="border border-gray-100 rounded-2xl sm:rounded-xl shadow-xl sm:shadow-2xl w-full max-w-[400px] sm:max-w-[440px] lg:max-w-none lg:w-170 flex flex-col justify-center items-center px-4 py-5 sm:py-7 lg:py-10 bg-white my-auto sm:my-0">
+          <h1 className="text-2xl sm:text-[30px] font-medium text-center">
+            Register
+          </h1>
+          <p className="text-gray-400 text-xs sm:text-sm text-center mt-1">
             Please enter your details to explore the application!
           </p>
-          <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg px-3 w-[80%] gap-3 mt-8">
-            <Email
-              style={{
-                fontSize: 30,
-                color: "black",
-              }}
-            />
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="py-4 focus:outline-none focus:border-none w-full"
-              type="text"
+          <div className="w-full flex flex-col items-center justify-center gap-3 mt-5">
+            <Input
+              name="email"
+              icon={<Email style={{ fontSize: 30, color: "black" }} />}
+              value={registerData.email}
+              onChange={handleChange}
+              type="email"
               placeholder="Enter Your email"
             />
-          </div>
-          <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg px-3 w-[80%] gap-3 mt-8">
-            <Person
-              style={{
-                fontSize: 30,
-                color: "black",
-              }}
-            />
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="py-4 focus:outline-none focus:border-none w-full"
+            <Input
+              name="name"
+              icon={<Person style={{ fontSize: 30, color: "black" }} />}
+              value={registerData.name}
+              onChange={handleChange}
               type="text"
               placeholder="Enter Your Name"
             />
-          </div>
-          <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg px-3 w-[80%] gap-3 mt-6">
-            <Password
-              style={{
-                fontSize: 30,
-                color: "black",
-              }}
-            />
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="py-4 focus:outline-none focus:border-none w-full"
-              type="text"
+            <Input
+              name="password"
+              icon={<Password style={{ fontSize: 30, color: "black" }} />}
+              value={registerData.password}
+              onChange={handleChange}
+              type="password"
               placeholder="Enter Your Password"
+              autoComplete="new-password"
             />
-          </div>
-          <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg px-3 w-[80%] gap-3 mt-6">
-            <Password
-              style={{
-                fontSize: 30,
-                color: "black",
-              }}
-            />
-            <input
-              className="py-4 focus:outline-none focus:border-none w-full"
-              type="text"
+            <Input
+              name="confirmPassword"
+              icon={<Password style={{ fontSize: 30, color: "black" }} />}
+              value={registerData.confirmPassword}
+              onChange={handleChange}
+              type="password"
               placeholder="Confirm Your Password"
+              autoComplete="new-password"
             />
           </div>
-          <button
-            onClick={handleRegister}
-            className="bg-black text-white px-3 py-3 w-[80%] rounded-md text-[21px] mt-6"
+          <Button onClick={handleRegister}>Register</Button>
+          <p className="py-1.5 sm:py-2 text-gray-500 text-xs sm:text-sm select-none">
+            or
+          </p>
+          <Button
+            variant="google"
+            icon={
+              <Image
+                src="/auth-svg/google.svg"
+                alt="Google"
+                width={22}
+                height={22}
+                className="w-5 h-5 sm:w-6 sm:h-6"
+              />
+            }
           >
-            Register
-          </button>
-          <p className="py-3 text-gray-500 text-md">or</p>
-          <div className="flex justify-center items-center border border-gray-300 shadow rounded-lg px-3 py-3 w-[80%] gap-3">
-            <Image
-              src="/auth-svg/google.svg"
-              alt="Login"
-              width={26}
-              height={26}
-            />
-            <p>Continue with Google</p>
-          </div>
-          <p className="text-black/80 mt-3">
-            Already have an Account?{" "}
-            <span
-              className="font-medium text-black underline cursor-pointer"
-              onClick={() => router.push("/login")}
+            Continue with Google
+          </Button>
+          <p className="text-black/80 mt-2.5 sm:mt-3 text-xs sm:text-sm text-center select-none">
+            Already have an Account?
+            <Link
+              href="/login"
+              className="font-medium text-black underline cursor-pointer inline-block py-1 touch-manipulation"
             >
               Login
-            </span>
+            </Link>
           </p>
         </div>
       </section>

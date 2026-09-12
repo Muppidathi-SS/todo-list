@@ -1,153 +1,120 @@
 "use client";
 
-import { Email, Password } from "@mui/icons-material";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Zoom } from "react-toastify";
+
+import { Email, Password } from "@mui/icons-material";
+
+import { loginUser } from "@/services/auth/auth.service";
+import { LOGIN_EMPTY, LoginData, LoginUser } from "@/services/auth/auth.type";
+import Button from "@/ui/Button";
+import Input from "@/ui/Input";
+import ShowToastify from "@/utils/ShowToastify";
 
 export default function Login() {
   const router = useRouter();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loginData, setLoginData] = useState<LoginData>(LOGIN_EMPTY);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    setError("");
-
-    if (!email || !password) {
-      setError("Please fill in all fields");
-      return;
-    }
-
+    const user: LoginUser = {
+      userEmail: loginData.email,
+      userPassword: loginData.password,
+    };
     try {
-      setLoading(true);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userEmail: email,
-          userPassword: password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Invalid credentials");
-        return;
-      }
-
-      console.log("LOGIN SUCCESS:", data);
-
-      // Store logged-in user in localStorage
-      if (typeof window !== "undefined" && data.user) {
+      const data = await loginUser(user);
+      if (data.user) {
         localStorage.setItem("user", JSON.stringify(data.user));
       }
-
-      // Navigate to /add-task once credentials matched
-      router.push("/add-task");
+      setLoginData(LOGIN_EMPTY);
+      ShowToastify({
+        message: "Login Success!",
+        type: "success",
+        position: "top-center",
+        transition: Zoom,
+      });
+      router.push("/appearance");
     } catch (err) {
-      console.error("LOGIN ERROR:", err);
-      setError("Unable to connect to the server. Please check your backend.");
-    } finally {
-      setLoading(false);
+      ShowToastify({
+        message: err instanceof Error ? err.message : "Login Failed!",
+        type: "error",
+        position: "top-center",
+        transition: Zoom,
+      });
     }
   };
 
   return (
     <>
-      <section className="bg-white h-screen w-full flex justify-center gap-20 items-center">
-        <div>
-          <Image
-            src="/auth-svg/login.svg"
-            alt="Login"
-            width={700}
-            height={700}
-            priority
-            className="w-auto h-auto"
-          />
-        </div>
+      <section className="bg-white min-h-svh lg:h-screen w-full flex flex-col lg:flex-row justify-center items-center px-4 sm:px-6 lg:p-0 lg:gap-20 py-4 sm:py-6 lg:py-0 overflow-y-auto">
         <form
+          autoComplete="off"
           onSubmit={handleLogin}
-          className="border border-gray-100 rounded-xl shadow-2xl w-170 flex flex-col justify-center items-center px-4 py-12"
+          className="border border-gray-100 rounded-2xl sm:rounded-xl shadow-xl sm:shadow-2xl w-full max-w-[400px] sm:max-w-[440px] lg:max-w-none lg:w-170 flex flex-col justify-center items-center px-4 py-6 sm:py-8 lg:py-12 bg-white my-auto sm:my-0"
         >
-          <h1 className="text-[32px] font-medium">Welcome</h1>
-          <p className="text-gray-400">
+          <h1 className="text-2xl sm:text-[32px] font-medium text-center">
+            Welcome
+          </h1>
+          <p className="text-gray-400 text-xs sm:text-base text-center mt-1">
             Please enter your details to start your day!
           </p>
 
-          {error && (
-            <div className="w-[80%] mt-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm text-center">
-              {error}
-            </div>
-          )}
-
-          <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg px-3 w-[80%] gap-3 mt-8">
-            <Email
-              style={{
-                fontSize: 30,
-                color: "black",
-              }}
-            />
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="py-4 focus:outline-none focus:border-none w-full"
+          <div className="w-full flex flex-col items-center justify-center gap-5 mt-5">
+            <Input
+              name="email"
+              icon={<Email style={{ fontSize: 30, color: "black" }} />}
+              value={loginData.email}
+              onChange={handleChange}
               type="email"
               placeholder="Enter Your email"
-              required
             />
-          </div>
-          <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg px-3 w-[80%] gap-3 mt-6">
-            <Password
-              style={{
-                fontSize: 30,
-                color: "black",
-              }}
-            />
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="py-4 focus:outline-none focus:border-none w-full"
+            <Input
+              name="password"
+              icon={<Password style={{ fontSize: 30, color: "black" }} />}
+              value={loginData.password}
+              onChange={handleChange}
               type="password"
               placeholder="Enter Your Password"
-              required
+              autoComplete="new-password"
             />
           </div>
-          <div className="flex justify-end w-[80%] py-3">
-            <p className="font-medium underline cursor-pointer">
-              Forgot Password?
-            </p>
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-black text-white px-3 py-3 w-[80%] rounded-md text-[21px] cursor-pointer hover:bg-black/90 transition disabled:opacity-50"
+          <Button type="submit">Login</Button>
+          <p className="py-2 sm:py-2.5 text-gray-500 text-sm sm:text-md select-none">
+            or
+          </p>
+          <Button
+            variant="google"
+            icon={
+              <Image
+                src="/auth-svg/google.svg"
+                alt="Google"
+                width={22}
+                height={22}
+                className="w-5 h-5 sm:w-6 sm:h-6"
+              />
+            }
           >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-          <p className="py-3 text-gray-500 text-md">or</p>
-          <div className="flex justify-center items-center border border-gray-300 shadow rounded-lg px-3 py-3 w-[80%] gap-3 cursor-pointer hover:bg-gray-50 transition">
-            <Image
-              src="/auth-svg/google.svg"
-              alt="Login"
-              width={26}
-              height={26}
-            />
-            <p>Login with Google</p>
-          </div>
-          <p className="text-black/80 mt-3">
-            Don't have an Account?{" "}
-            <span
-              className="font-medium text-black underline cursor-pointer"
-              onClick={() => router.push("/register")}
+            Continue with Google
+          </Button>
+          <p className="text-black/80 mt-3 text-xs sm:text-base text-center select-none">
+            Don't have an Account?
+            <Link
+              href="/register"
+              className="font-medium text-black underline cursor-pointer inline-block py-1 touch-manipulation"
             >
               Register
-            </span>
+            </Link>
           </p>
         </form>
       </section>

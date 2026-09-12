@@ -13,10 +13,10 @@ export interface SideTabItem {
 }
 
 export const SideTabs: SideTabItem[] = [
-  { label: "Search", icon: SearchIcon, path: "/task-search" },
-  { label: "Today", icon: InsertInvitationIcon, path: "/today" },
-  { label: "Upcoming", icon: CalendarMonthIcon, path: "/upcoming" },
-  { label: "Filters", icon: FilterAltIcon, path: "/filters" },
-  { label: "Completed", icon: LibraryAddCheckIcon, path: "/completed" },
+  // { label: "Search", icon: SearchIcon, path: "/task-search" },
+  // { label: "Today", icon: InsertInvitationIcon, path: "/today" },
+  // { label: "Upcoming", icon: CalendarMonthIcon, path: "/upcoming" },
+  // { label: "Filters", icon: FilterAltIcon, path: "/filters" },
+  // { label: "Completed", icon: LibraryAddCheckIcon, path: "/completed" },
   { label: "Appearance", icon: ColorLensIcon, path: "/appearance" },
 ];
