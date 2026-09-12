@@ -47,10 +47,7 @@ export default function Sidebar({ onNavigate }: SidebarProps = {}) {
       <div className="flex flex-col gap-1 w-full">
         {SideTabs.map((item) => {
           const Icon = item.icon;
-          const isSelected = item.path
-            ? pathname === item.path ||
-              (pathname === "/" && item.path === "/today")
-            : false;
+          const isSelected = item.path ? pathname === item.path : false;
 
           return (
             <div
