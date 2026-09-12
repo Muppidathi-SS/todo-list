@@ -12,13 +12,17 @@ export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [userName, setUserName] = useState<string>("");
+  const themeColor = useSelector((state: RootState) => state.theme.themeColor);
 
   useEffect(() => {
     setMounted(true);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setUserName(user.userName || "");
+    }
   }, []);
-
-  const themeColor = useSelector((state: RootState) => state.theme.themeColor);
-  const activeColor = mounted ? themeColor : "#ff6b4a";
 
   const handleTabClick = (item: SideTabItem) => {
     if (item.path) {
@@ -29,21 +33,6 @@ export default function Sidebar() {
   return (
     <div className="w-full h-full flex justify-between flex-col gap-2">
       <div>
-        <div
-          onClick={() => router.push("/add-task")}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer"
-        >
-          <AddCircleIcon
-            style={{
-              fontSize: 30,
-              color: activeColor,
-            }}
-          />
-
-          <h1 className="text-xl font-medium" style={{ color: activeColor }}>
-            Add Task
-          </h1>
-        </div>
         {SideTabs.map((item) => {
           const Icon = item.icon;
           const isSelected = item.path
@@ -63,8 +52,9 @@ export default function Sidebar() {
               style={
                 isSelected
                   ? {
-                      backgroundColor: `${activeColor}30`,
-                      color: activeColor,
+                      backgroundColor:
+                        "color-mix(in srgb, var(--theme-color) 19%, transparent)",
+                      color: "var(--theme-color)",
                     }
                   : undefined
               }
@@ -77,10 +67,10 @@ export default function Sidebar() {
       </div>
       <div className="w-full flex items-center justify-between">
         <div className="flex justify-center items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-red-500 text-white text-[21px] flex justify-center items-center">
-            A
+          <div className="h-10 w-10 uppercase rounded-full bg-red-500 text-white text-[21px] flex justify-center items-center">
+            {userName.charAt(0)}
           </div>
-          <span className="text-[18px]">Aadhi</span>
+          <span className="text-[18px]">{userName}</span>
         </div>
         <button
           onClick={() => router.push("/login")}

@@ -18,7 +18,10 @@ export default function AddBar() {
   return (
     <>
       <div className="flex flex-col justify-start items-center py-5 h-full">
-        <h2 className="font-medium text-3xl" style={{ color: themeColor }}>
+        <h2
+          className="font-medium text-3xl"
+          style={{ color: "var(--theme-color)" }}
+        >
           Hi,{" "}
           <TypeAnimation
             sequence={["Aadhi", 1000, "", 500]}
@@ -40,7 +43,7 @@ export default function AddBar() {
             <AddCircle
               style={{
                 fontSize: 40,
-                color: themeColor,
+                color: "var(--theme-color)",
               }}
             />
           </button>
@@ -49,17 +52,27 @@ export default function AddBar() {
         {showTasks ? (
           <div className="flex flex-col justify-center items-center gap-2 mt-50">
             <NotFoundIcon color={themeColor} />
-            <h2 className="font-medium text-3xl" style={{ color: themeColor }}>
+            <h2
+              className="font-medium text-3xl"
+              style={{ color: "var(--theme-color)" }}
+            >
               No Tasks Added Today, Aadhi!
             </h2>
-            <p style={{ color: `${themeColor}CC` }}>
+            <p
+              style={{
+                color: "color-mix(in srgb, var(--theme-color) 80%, transparent)",
+              }}
+            >
               you haven't added any tasks for today. Add a new task to get
               started.
             </p>
           </div>
         ) : (
           <div className="flex flex-col items-center mt-4 gap-5">
-            <h2 className="font-medium text-3xl" style={{ color: themeColor }}>
+            <h2
+              className="font-medium text-3xl"
+              style={{ color: "var(--theme-color)" }}
+            >
               Today
             </h2>
             {TODAY_TASKS.map((task, index) => {

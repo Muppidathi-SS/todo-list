@@ -23,7 +23,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${poppins.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var c=localStorage.getItem("themeColor");if(c){document.documentElement.style.setProperty("--theme-color",c);}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body
         className={`${poppins.className} min-h-full flex flex-col font-sans`}
       >

@@ -14,8 +14,6 @@ export default function Completed() {
   }, []);
 
   const themeColor = useSelector((state: RootState) => state.theme.themeColor);
-  const activeColor = mounted ? themeColor : "#ff6b4a";
-
   return (
     <div className="flex flex-col justify-start items-center py-10 px-5 h-full w-full">
       <div className="w-full">
