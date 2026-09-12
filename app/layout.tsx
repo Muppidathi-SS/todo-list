@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import "@/styles/customStyles.css";
+import "react-toastify/dist/ReactToastify.css";
 import MainLayout from "@/components/MainLayout";
+import { ToastContainer } from "react-toastify";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,6 +27,7 @@ export default function RootLayout({
       <body
         className={`${poppins.className} min-h-full flex flex-col font-sans`}
       >
+        <ToastContainer />
         <MainLayout>{children}</MainLayout>
       </body>
     </html>
