@@ -2,19 +2,24 @@
 
 import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { StoreProvider } from "@/store/StoreProvider";
+import { store } from "@/store/store";
+import { setSession, clearSession } from "@/store/sessionSlice";
+import { getStoredSession, clearStoredSession } from "@/utils/session";
 import Sidebar from "@/components/Sidebar";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import GlobalPopup from "@/ui/GlobalPopup";
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [userName, setUserName] = useState<string>("");
@@ -27,34 +32,53 @@ export default function MainLayout({
     pathname === "/" || pathname === "/login" || pathname === "/register";
 
   useEffect(() => {
-    if (!isLoggedIn && !isAuthPage) {
-      router.push("/login");
+    const session = getStoredSession();
+    if (session) {
+      setIsLoggedIn(true);
+      setUserName(session.name);
+      setUserEmail(session.email);
+      setIsChecking(false);
+      store.dispatch(
+        setSession({
+          id: session.id,
+          name: session.name,
+          email: session.email,
+          token: session.token,
+        }),
+      );
+      if (isAuthPage) {
+        router.replace("/add-task");
+      }
+    } else {
+      setIsLoggedIn(false);
+      setIsChecking(false);
+      if (!isAuthPage) {
+        router.replace("/login");
+      }
     }
-  }, [isLoggedIn, isAuthPage, router]);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const user = JSON.parse(storedUser);
-        setUserName(user.userName || "");
-        setUserEmail(user.userEmail || "");
-      } catch (e) {}
-    }
-  }, []);
+  }, [pathname, isAuthPage, router]);
 
   useEffect(() => {
     setMobileOpen(false);
     setProfileOpen(false);
   }, [pathname]);
 
-  if (!isLoggedIn || isAuthPage) {
-    return <StoreProvider>{children}</StoreProvider>;
+  if (isAuthPage) {
+    if (isLoggedIn) {
+      return null;
+    }
+    return <>{children}</>;
+  }
+
+  if (isChecking || !isLoggedIn) {
+    return null;
   }
 
   const handleLogout = () => {
     setProfileOpen(false);
-    localStorage.removeItem("user");
+    clearStoredSession();
+    store.dispatch(clearSession());
+    setIsLoggedIn(false);
     router.push("/login");
   };
 
@@ -64,7 +88,7 @@ export default function MainLayout({
   };
 
   return (
-    <StoreProvider>
+    <>
       <div className="h-screen w-full flex flex-col md:flex-row bg-zinc-50 dark:bg-black overflow-hidden">
         <header className="flex md:hidden items-center justify-between px-4 py-3 bg-[#fcfaf8] dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 z-30 shrink-0">
           <button
@@ -132,16 +156,7 @@ export default function MainLayout({
 
                   <button
                     type="button"
-                    onClick={handleSignUp}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-lg cursor-pointer transition"
-                  >
-                    <PersonAddIcon fontSize="small" />
-                    <span>Sign Up</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleLogout}
+                    onClick={() => setOpenPopup(true)}
                     className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg cursor-pointer transition"
                   >
                     <LogoutIcon fontSize="small" />
@@ -192,7 +207,15 @@ export default function MainLayout({
           {children}
         </main>
       </div>
-    </StoreProvider>
+      {openPopup && (
+        <GlobalPopup
+          title={"Logout"}
+          message={"Are you sure you want to Logout"}
+          onCancel={() => setOpenPopup(false)}
+          onConfirm={handleLogout}
+        />
+      )}
+    </>
   );
 }
 
