@@ -39,7 +39,7 @@ export default function RootLayout({
       <body
         className={`${poppins.className} min-h-full flex flex-col font-sans`}
       >
-        <ToastContainer />
+        <ToastContainer position="top-center" autoClose={3000} />
         <StoreProvider>
           <MainLayout>{children}</MainLayout>
         </StoreProvider>

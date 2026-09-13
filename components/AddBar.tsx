@@ -14,6 +14,9 @@ import {
   TODOS_EMPTY,
 } from "@/services/todos/todos.type";
 import { addTodo, getTodos, updateTodo } from "@/services/todos/todos.service";
+import ShowToastify from "@/utils/ShowToastify";
+
+import HourglassBottomOutlinedIcon from "@mui/icons-material/HourglassBottomOutlined";
 import GlobalPopup from "@/ui/GlobalPopup";
 import Input from "@/ui/Input";
 
@@ -32,22 +35,40 @@ import {
 
 export default function AddBar() {
   const session = useSelector((state: RootState) => state.session);
+  const [isLoading, setIsLoading] = useState(false);
   const [taskName, setTaskName] = useState("");
   const [openDialogue, setOpenDialogue] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Todo>(TODO_EMPTY);
   const [todos, setTodos] = useState<Todos>(TODOS_EMPTY);
 
+  const fetchTodos = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getTodos(session.id);
+      setTodos(response.todos || []);
+    } catch (err) {
+      console.error("Failed to fetch todos:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleAddTask = async () => {
     const task = taskName.trim();
     if (!task) return;
-    const response = await addTodo(session.id, task, false);
-    fetchTodos();
-    setTaskName("");
-  };
-
-  const fetchTodos = async () => {
-    const response = await getTodos(session.id);
-    setTodos(response.todos);
+    try {
+      setIsLoading(true);
+      await addTodo(session.id, task, false);
+      await fetchTodos();
+      setTaskName("");
+    } catch (err) {
+      ShowToastify({
+        message: err instanceof Error ? err.message : "Failed to add task",
+        type: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSelectedTask = (task: Todo) => {
@@ -56,14 +77,20 @@ export default function AddBar() {
   };
 
   const handlesChnageTask = async () => {
-    const response = await updateTodo(
-      session.id,
-      selectedTask._id,
-      selectedTask.isCompleted,
-    );
-    setOpenDialogue(false);
-    setSelectedTask(TODO_EMPTY);
-    fetchTodos();
+    try {
+      setIsLoading(true);
+      await updateTodo(session.id, selectedTask._id, selectedTask.isCompleted);
+      setOpenDialogue(false);
+      setSelectedTask(TODO_EMPTY);
+      await fetchTodos();
+    } catch (err) {
+      ShowToastify({
+        message: err instanceof Error ? err.message : "Failed to update task",
+        type: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -195,25 +222,37 @@ export default function AddBar() {
                 </FormControl>
               </div>
             </div>
-            <div className="flex justify-center gap-3 mt-10">
-              <button
-                onClick={() => setOpenDialogue(false)}
-                className="px-4 py-2 w-full text-gray-500 hover:text-[var(--theme-color)] rounded-md border border-gray-300 cursor-pointer hover:bg-[color-mix(in_srgb,var(--theme-color)_11%,transparent)]"
-              >
-                Cancel
-              </button>
+            <div className="flex flex-col sm:flex-row justify-center gap-2.5 sm:gap-3 mt-8 sm:mt-10">
               <button
                 onClick={handlesChnageTask}
-                className="px-4 py-2 w-full rounded-md text-white cursor-pointer"
+                className="px-4 py-2.5 sm:py-2 w-full rounded-md text-white cursor-pointer transition-all font-medium text-sm sm:text-base"
                 style={{ backgroundColor: "var(--theme-color)" }}
               >
                 Save Changes
+              </button>
+              <button
+                onClick={() => setOpenDialogue(false)}
+                className="px-4 py-2.5 sm:py-2 w-full text-gray-500 hover:text-[var(--theme-color)] rounded-md border border-gray-300 cursor-pointer hover:bg-[color-mix(in_srgb,var(--theme-color)_11%,transparent)] transition-all font-medium text-sm sm:text-base"
+              >
+                Cancel
               </button>
             </div>
             {/* <p className="text-[13px] text-gray-500 mt-3 flex justify-center items-center gap-1">
               <InfoIcon sx={{ fontSize: 20 }} />
               Click edit icon to you can change the mode to delete
             </p> */}
+          </div>
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-sm flex flex-col items-center justify-center gap-3">
+            <HourglassBottomOutlinedIcon
+              className="animate-spin"
+              style={{ fontSize: 44, color: "var(--theme-color)" }}
+            />
+            <h2 className="text-lg font-medium text-gray-800">Loading...</h2>
           </div>
         </div>
       )}

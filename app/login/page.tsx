@@ -7,10 +7,9 @@ import { useState } from "react";
 import { Zoom } from "react-toastify";
 
 import { Email, Password } from "@mui/icons-material";
+import HourglassBottomOutlinedIcon from "@mui/icons-material/HourglassBottomOutlined";
 
 import { useDispatch } from "react-redux";
-
-
 
 import { loginUser } from "@/services/auth/auth.service";
 import {
@@ -28,6 +27,7 @@ import ShowToastify from "@/utils/ShowToastify";
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const [loginData, setLoginData] = useState<LoginData>(LOGIN_EMPTY);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +45,7 @@ export default function Login() {
       userPassword: loginData.password,
     };
     try {
+      setIsLoading(true);
       const data: LoginResponse = await loginUser(user);
       const id = data.id || data.user?._id || data.user?.id || "";
       const name = data.userName || data.user?.userName || "";
@@ -60,7 +61,7 @@ export default function Login() {
         position: "top-center",
         transition: Zoom,
       });
-      router.push("/appearance");
+      router.push("/add-task");
     } catch (err) {
       ShowToastify({
         message: err instanceof Error ? err.message : "Login Failed!",
@@ -68,6 +69,8 @@ export default function Login() {
         position: "top-center",
         transition: Zoom,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,7 +92,9 @@ export default function Login() {
           <div className="w-full flex flex-col items-center justify-center gap-5 mt-5">
             <Input
               name="email"
-              icon={<Email style={{ fontSize: 30, color: "var(--theme-color)" }} />}
+              icon={
+                <Email style={{ fontSize: 30, color: "var(--theme-color)" }} />
+              }
               value={loginData.email}
               onChange={handleChange}
               type="email"
@@ -97,7 +102,11 @@ export default function Login() {
             />
             <Input
               name="password"
-              icon={<Password style={{ fontSize: 30, color: "var(--theme-color)" }} />}
+              icon={
+                <Password
+                  style={{ fontSize: 30, color: "var(--theme-color)" }}
+                />
+              }
               value={loginData.password}
               onChange={handleChange}
               type="password"
@@ -127,13 +136,24 @@ export default function Login() {
             Don't have an Account?
             <Link
               href="/register"
-              className="font-medium text-black underline cursor-pointer inline-block py-1 touch-manipulation"
+              className="font-medium text-black underline cursor-pointer inline-block py-1 pl-2 touch-manipulation"
             >
               Register
             </Link>
           </p>
         </form>
       </section>
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-sm flex flex-col items-center justify-center gap-3">
+            <HourglassBottomOutlinedIcon
+              className="animate-spin"
+              style={{ fontSize: 44, color: "var(--theme-color)" }}
+            />
+            <h2 className="text-lg font-medium text-gray-800">Loading...</h2>
+          </div>
+        </div>
+      )}
     </>
   );
 }

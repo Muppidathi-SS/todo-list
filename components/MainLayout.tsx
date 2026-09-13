@@ -47,7 +47,7 @@ export default function MainLayout({
         }),
       );
       if (isAuthPage) {
-        router.replace("/appearance");
+        router.replace("/add-task");
       }
     } else {
       setIsLoggedIn(false);
