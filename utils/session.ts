@@ -38,7 +38,7 @@ export const saveSession = (session: {
       userEmail: session.email,
       token: session.token,
       expiresAt,
-    })
+    }),
   );
 
   // Set cookie for Next.js proxy/middleware server-side protection
@@ -48,37 +48,66 @@ export const saveSession = (session: {
 export const getStoredSession = (): StoredSession | null => {
   if (typeof window === "undefined") return null;
 
-  const raw =
-    sessionStorage.getItem("session") ||
-    localStorage.getItem("session") ||
-    localStorage.getItem("user");
-
-  if (!raw) return null;
-
-  try {
-    const parsed = JSON.parse(raw);
-    const expiresAt = parsed.expiresAt;
-
-    // Check if 1-hour session timeout has elapsed
-    if (expiresAt && Date.now() > expiresAt) {
-      clearStoredSession();
+  const parseItem = (key: string, storage: Storage) => {
+    try {
+      const val = storage.getItem(key);
+      if (!val || val === "undefined" || val === "null") return null;
+      return JSON.parse(val);
+    } catch {
       return null;
     }
+  };
 
-    return {
-      id: parsed.id || parsed._id || "",
-      name: parsed.name || parsed.userName || "",
-      email: parsed.email || parsed.userEmail || "",
-      token:
-        parsed.token ||
-        sessionStorage.getItem("token") ||
-        localStorage.getItem("token") ||
-        "",
-      expiresAt: expiresAt || Date.now() + ONE_HOUR_MS,
-    };
-  } catch {
+  const candidate =
+    parseItem("session", sessionStorage) ||
+    parseItem("session", localStorage) ||
+    parseItem("user", localStorage) ||
+    parseItem("user", sessionStorage);
+
+  if (!candidate) return null;
+
+  const u = candidate.user || candidate;
+  const expiresAt = candidate.expiresAt || u.expiresAt;
+
+  // Check if 1-hour session timeout has elapsed
+  if (expiresAt && Date.now() > expiresAt) {
+    clearStoredSession();
     return null;
   }
+
+  const id = candidate.id || candidate._id || u.id || u._id || "";
+  const name =
+    candidate.name || candidate.userName || u.name || u.userName || "";
+  const email =
+    candidate.email || candidate.userEmail || u.email || u.userEmail || "";
+  const token =
+    candidate.token ||
+    u.token ||
+    sessionStorage.getItem("token") ||
+    localStorage.getItem("token") ||
+    "";
+
+  // If no identifying fields exist, it's not a valid session
+  if (!id && !name && !email) {
+    return null;
+  }
+
+  // Ensure cookie is synced if token exists
+  if (
+    token &&
+    typeof document !== "undefined" &&
+    !document.cookie.includes("token=")
+  ) {
+    document.cookie = `token=${token}; path=/; max-age=3600; SameSite=Lax`;
+  }
+
+  return {
+    id,
+    name,
+    email,
+    token,
+    expiresAt: expiresAt || Date.now() + ONE_HOUR_MS,
+  };
 };
 
 export const clearStoredSession = () => {
@@ -89,6 +118,6 @@ export const clearStoredSession = () => {
   localStorage.removeItem("session");
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  document.cookie = "token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  document.cookie =
+    "token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 };
-

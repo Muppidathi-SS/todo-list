@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { StoreProvider } from "@/store/StoreProvider";
 import { store } from "@/store/store";
-import { clearSession } from "@/store/sessionSlice";
+import { setSession, clearSession } from "@/store/sessionSlice";
 import { getStoredSession, clearStoredSession } from "@/utils/session";
 import Sidebar from "@/components/Sidebar";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -37,6 +36,14 @@ export default function MainLayout({
       setUserName(session.name);
       setUserEmail(session.email);
       setIsChecking(false);
+      store.dispatch(
+        setSession({
+          id: session.id,
+          name: session.name,
+          email: session.email,
+          token: session.token,
+        }),
+      );
     } else {
       setIsLoggedIn(false);
       setIsChecking(false);
@@ -52,7 +59,7 @@ export default function MainLayout({
   }, [pathname]);
 
   if (isAuthPage) {
-    return <StoreProvider>{children}</StoreProvider>;
+    return <>{children}</>;
   }
 
   if (isChecking || !isLoggedIn) {
@@ -73,7 +80,7 @@ export default function MainLayout({
   };
 
   return (
-    <StoreProvider>
+    <>
       <div className="h-screen w-full flex flex-col md:flex-row bg-zinc-50 dark:bg-black overflow-hidden">
         <header className="flex md:hidden items-center justify-between px-4 py-3 bg-[#fcfaf8] dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 z-30 shrink-0">
           <button
@@ -201,7 +208,7 @@ export default function MainLayout({
           {children}
         </main>
       </div>
-    </StoreProvider>
+    </>
   );
 }
 

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getStoredSession } from "@/utils/session";
 
 export interface SessionState {
   id: string;
@@ -7,12 +8,25 @@ export interface SessionState {
   token?: string;
 }
 
-const initialState: SessionState = {
-  id: "",
-  name: "",
-  email: "",
-  token: "",
+const getInitialSession = (): SessionState => {
+  const session = getStoredSession();
+  if (session) {
+    return {
+      id: session.id,
+      name: session.name,
+      email: session.email,
+      token: session.token,
+    };
+  }
+  return {
+    id: "",
+    name: "",
+    email: "",
+    token: "",
+  };
 };
+
+const initialState: SessionState = getInitialSession();
 
 export const sessionSlice = createSlice({
   name: "session",
@@ -24,7 +38,12 @@ export const sessionSlice = createSlice({
       state.email = action.payload.email;
       state.token = action.payload.token || "";
     },
-    clearSession: () => initialState,
+    clearSession: () => ({
+      id: "",
+      name: "",
+      email: "",
+      token: "",
+    }),
   },
 });
 
