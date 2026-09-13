@@ -8,6 +8,7 @@ import { clearSession } from "@/store/sessionSlice";
 import { clearStoredSession } from "@/utils/session";
 import { SideTabs, SideTabItem } from "@/constants/navigation";
 import LogoutIcon from "@mui/icons-material/Logout";
+import GlobalPopup from "@/ui/GlobalPopup";
 
 interface SidebarProps {
   onNavigate?: () => void;
@@ -110,29 +111,12 @@ export default function Sidebar({ onNavigate }: SidebarProps = {}) {
         </div>
       </div>
       {openPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm">
-            <h2 className="text-lg font-medium mb-3">Logout</h2>
-            <p className="text-gray-500 mb-6">
-              Are you sure you want to Logout
-            </p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setOpenPopup(false)}
-                className="px-4 py-2 rounded-md border border-gray-300 cursor-pointer"
-              >
-                No
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 rounded-md text-white cursor-pointer"
-                style={{ backgroundColor: "var(--theme-color)" }}
-              >
-                Yes
-              </button>
-            </div>
-          </div>
-        </div>
+        <GlobalPopup
+          title={"Logout"}
+          message={"Are you sure you want to Logout"}
+          onCancel={() => setOpenPopup(false)}
+          onConfirm={handleLogout}
+        />
       )}
     </>
   );

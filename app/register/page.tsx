@@ -64,7 +64,7 @@ export default function Register() {
           <div className="w-full flex flex-col items-center justify-center gap-3 mt-5">
             <Input
               name="email"
-              icon={<Email style={{ fontSize: 30, color: "black" }} />}
+              icon={<Email style={{ fontSize: 30, color: "var(--theme-color)" }} />}
               value={registerData.email}
               onChange={handleChange}
               type="email"
@@ -72,7 +72,7 @@ export default function Register() {
             />
             <Input
               name="name"
-              icon={<Person style={{ fontSize: 30, color: "black" }} />}
+              icon={<Person style={{ fontSize: 30, color: "var(--theme-color)" }} />}
               value={registerData.name}
               onChange={handleChange}
               type="text"
@@ -80,7 +80,7 @@ export default function Register() {
             />
             <Input
               name="password"
-              icon={<Password style={{ fontSize: 30, color: "black" }} />}
+              icon={<Password style={{ fontSize: 30, color: "var(--theme-color)" }} />}
               value={registerData.password}
               onChange={handleChange}
               type="password"
@@ -89,7 +89,7 @@ export default function Register() {
             />
             <Input
               name="confirmPassword"
-              icon={<Password style={{ fontSize: 30, color: "black" }} />}
+              icon={<Password style={{ fontSize: 30, color: "var(--theme-color)" }} />}
               value={registerData.confirmPassword}
               onChange={handleChange}
               type="password"
@@ -98,7 +98,7 @@ export default function Register() {
             />
           </div>
           <Button onClick={handleRegister}>Register</Button>
-          <p className="py-1.5 sm:py-2 text-gray-500 text-xs sm:text-sm select-none">
+          {/* <p className="py-1.5 sm:py-2 text-gray-500 text-xs sm:text-sm select-none">
             or
           </p>
           <Button
@@ -114,7 +114,7 @@ export default function Register() {
             }
           >
             Continue with Google
-          </Button>
+          </Button> */}
           <p className="text-black/80 mt-2.5 sm:mt-3 text-xs sm:text-sm text-center select-none">
             Already have an Account?
             <Link

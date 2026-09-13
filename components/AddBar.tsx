@@ -1,22 +1,40 @@
 "use client";
 
 import { RootState } from "@/store/store";
-import { AddCircle } from "@mui/icons-material";
+import { AddCircle, Email } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { TypeAnimation } from "react-type-animation";
 import { useEffect, useState } from "react";
 import ShowTodos from "./ShowTodos";
 import NotFound from "./NotFound";
-import { Todos, TODOS_EMPTY } from "@/services/todos/todos.type";
+import {
+  Todo,
+  TODO_EMPTY,
+  Todos,
+  TODOS_EMPTY,
+} from "@/services/todos/todos.type";
 import { addTodo, getTodos, updateTodo } from "@/services/todos/todos.service";
-import { idID } from "@mui/material/locale";
+import GlobalPopup from "@/ui/GlobalPopup";
+import Input from "@/ui/Input";
+
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import InfoIcon from "@mui/icons-material/Info";
+
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import {
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 
 export default function AddBar() {
   const session = useSelector((state: RootState) => state.session);
-  const [openPopup, setOpenPopup] = useState(false);
   const [taskName, setTaskName] = useState("");
-  const [selectedId, setSelectedId] = useState("");
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [openDialogue, setOpenDialogue] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Todo>(TODO_EMPTY);
   const [todos, setTodos] = useState<Todos>(TODOS_EMPTY);
 
   const handleAddTask = async () => {
@@ -32,17 +50,19 @@ export default function AddBar() {
     setTodos(response.todos);
   };
 
-  const handleComplete = async (id: string, value: boolean) => {
-    setSelectedId(id);
-    setIsCompleted(!value);
-    setOpenPopup(true);
+  const handleSelectedTask = (task: Todo) => {
+    setSelectedTask(task);
+    setOpenDialogue(true);
   };
 
-  const handleIsCompleted = async () => {
-    const response = await updateTodo(session.id, selectedId, isCompleted);
-    setSelectedId("");
-    setIsCompleted(false);
-    setOpenPopup(false);
+  const handlesChnageTask = async () => {
+    const response = await updateTodo(
+      session.id,
+      selectedTask._id,
+      selectedTask.isCompleted,
+    );
+    setOpenDialogue(false);
+    setSelectedTask(TODO_EMPTY);
     fetchTodos();
   };
 
@@ -95,35 +115,105 @@ export default function AddBar() {
 
         <div className="w-full max-w-2xl mt-4 sm:mt-6">
           {todos.length !== 0 ? (
-            <ShowTodos data={todos} onSelect={handleComplete} />
+            <ShowTodos data={todos} onSelecteTodo={handleSelectedTask} />
           ) : (
             <NotFound />
           )}
         </div>
       </div>
 
-      {openPopup && (
+      {openDialogue && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm">
-            <h2 className="text-lg font-medium mb-3">Edit Todo?</h2>
-            <p className="text-gray-500 mb-6">
-              {`Are you sure you want to mark this todo as ${isCompleted ? "completed" : "incomplete"}?`}
-            </p>
-            <div className="flex justify-end gap-3">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-[420px] relative">
+            <div
+              className="h-12 w-12 rounded-full flex justify-center items-center absolute -top-2 -right-2 cursor-pointer"
+              style={{
+                backgroundColor: "var(--theme-color)",
+                color: "white",
+              }}
+            >
+              <ModeEditOutlineOutlinedIcon
+                sx={{
+                  fontSize: { xs: 23, sm: 24 },
+                }}
+              />
+            </div>
+            <h2 className="text-lg font-medium mb-4 text-center">Edit Todo</h2>
+            <div className="w-full flex flex-col gap-4">
+              {/* <Input
+                name="task"
+                value={selectedTask.taskName}
+                onChange={(e) =>
+                  setSelectedTask((prev) => ({
+                    ...prev,
+                    taskName: e.target.value,
+                  }))
+                }
+                type="text"
+                placeholder=""
+              /> */}
+              <p className="flex px-2 py-1 rounded-sm w-full bg-[color-mix(in_srgb,var(--theme-color)_11%,transparent)] border border-[var(--theme-color)]">
+                {selectedTask.taskName}
+              </p>
+              <div className="flex ml-1">
+                <FormControl>
+                  <FormControlLabel
+                    label="Mark as completed"
+                    labelPlacement="start"
+                    sx={{
+                      margin: 0,
+                      gap: 1.5,
+                      "& .MuiFormControlLabel-label": {
+                        fontFamily: "var(--font-poppins)",
+                      },
+                    }}
+                    control={
+                      <span
+                        onClick={() =>
+                          setSelectedTask((pre) => ({
+                            ...pre,
+                            isCompleted: !pre.isCompleted,
+                          }))
+                        }
+                        className="cursor-pointer"
+                      >
+                        {selectedTask.isCompleted ? (
+                          <CheckCircleIcon
+                            sx={{
+                              color: "green",
+                              fontSize: { xs: 20, sm: 24 },
+                            }}
+                          />
+                        ) : (
+                          <RadioButtonUncheckedIcon
+                            sx={{ color: "gray", fontSize: { xs: 20, sm: 24 } }}
+                          />
+                        )}
+                      </span>
+                    }
+                  />
+                </FormControl>
+              </div>
+            </div>
+            <div className="flex justify-center gap-3 mt-10">
               <button
-                onClick={() => setOpenPopup(false)}
-                className="px-4 py-2 rounded-md border border-gray-300 cursor-pointer"
+                onClick={() => setOpenDialogue(false)}
+                className="px-4 py-2 w-full text-gray-500 hover:text-[var(--theme-color)] rounded-md border border-gray-300 cursor-pointer hover:bg-[color-mix(in_srgb,var(--theme-color)_11%,transparent)]"
               >
-                No
+                Cancel
               </button>
               <button
-                onClick={handleIsCompleted}
-                className="px-4 py-2 rounded-md text-white cursor-pointer"
+                onClick={handlesChnageTask}
+                className="px-4 py-2 w-full rounded-md text-white cursor-pointer"
                 style={{ backgroundColor: "var(--theme-color)" }}
               >
-                Yes
+                Save Changes
               </button>
             </div>
+            {/* <p className="text-[13px] text-gray-500 mt-3 flex justify-center items-center gap-1">
+              <InfoIcon sx={{ fontSize: 20 }} />
+              Click edit icon to you can change the mode to delete
+            </p> */}
           </div>
         </div>
       )}

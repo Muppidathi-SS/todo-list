@@ -1,14 +1,15 @@
 "use client";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import AccessTimeFilledOutlinedIcon from "@mui/icons-material/AccessTimeFilledOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Todos } from "@/services/todos/todos.type";
+import { Todo, Todos } from "@/services/todos/todos.type";
 
 type ShowTodosProps = {
   data: Todos;
-  onSelect: (selectedId: string, isCompleted: boolean) => void;
+  onSelecteTodo: (selectedTask: Todo) => void;
 };
 
-export default function ShowTodos({ data, onSelect }: ShowTodosProps) {
+export default function ShowTodos({ data, onSelecteTodo }: ShowTodosProps) {
   const getDate = (date: string) => {
     return new Date(date).toLocaleDateString("en-US", {
       month: "short",
@@ -19,37 +20,35 @@ export default function ShowTodos({ data, onSelect }: ShowTodosProps) {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-3 sm:gap-4 mt-2">
-        <h2
-          className="font-medium text-xl sm:text-2xl text-center sm:text-left"
-          style={{ color: "var(--theme-color)" }}
-        >
-          Today
-        </h2>
+      <h2
+        className="font-medium text-xl sm:text-2xl text-center sm:text-left"
+        style={{ color: "var(--theme-color)" }}
+      >
+        Today
+      </h2>
+      <div className="w-full flex flex-col gap-3 sm:gap-6 mt-2">
         {data.map((task, index) => {
           return (
             <div
               key={task._id || index}
-              className="w-full flex items-center gap-3 px-4 py-3 sm:px-5 sm:py-3.5 rounded-xl border hover:bg-blue-100/40 border-gray-200 dark:border-zinc-700/60 bg-white dark:bg-zinc-800 shadow-xs hover:shadow-sm cursor-pointer transition-all"
+              onClick={() => onSelecteTodo(task)}
+              className="relative w-full flex items-center gap-3 px-4 py-3 sm:px-5 sm:py-3.5 rounded-xl border hover:bg-blue-100/40 border-gray-200 dark:border-zinc-700/60 bg-white dark:bg-zinc-800 shadow-xs hover:shadow-sm cursor-pointer transition-all"
             >
-              <div
-                onClick={() => onSelect(task._id, task.isCompleted)}
-                className="cursor-pointer shrink-0 flex items-center"
-              >
+              <div className="cursor-pointer shrink-0 flex items-center absolute -top-3 -right-2">
                 {task.isCompleted ? (
                   <CheckCircleIcon
-                    sx={{ color: "green", fontSize: { xs: 20, sm: 24 } }}
+                    sx={{ color: "green", fontSize: { xs: 20, sm: 26 } }}
                   />
                 ) : (
-                  <RadioButtonUncheckedIcon
-                    sx={{ color: "gray", fontSize: { xs: 20, sm: 24 } }}
+                  <AccessTimeFilledOutlinedIcon
+                    sx={{ color: "#fffff", fontSize: { xs: 20, sm: 26 } }}
                   />
                 )}
               </div>
               <p
                 className={`font-normal text-sm sm:text-base flex-1 min-w-0 break-words ${
                   task.isCompleted
-                    ? "line-through text-gray-400 dark:text-zinc-500"
+                    ? "text-gray-400 dark:text-zinc-500"
                     : "text-gray-800 dark:text-zinc-100"
                 }`}
               >

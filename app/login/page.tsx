@@ -89,7 +89,7 @@ export default function Login() {
           <div className="w-full flex flex-col items-center justify-center gap-5 mt-5">
             <Input
               name="email"
-              icon={<Email style={{ fontSize: 30, color: "black" }} />}
+              icon={<Email style={{ fontSize: 30, color: "var(--theme-color)" }} />}
               value={loginData.email}
               onChange={handleChange}
               type="email"
@@ -97,7 +97,7 @@ export default function Login() {
             />
             <Input
               name="password"
-              icon={<Password style={{ fontSize: 30, color: "black" }} />}
+              icon={<Password style={{ fontSize: 30, color: "var(--theme-color)" }} />}
               value={loginData.password}
               onChange={handleChange}
               type="password"
@@ -106,7 +106,7 @@ export default function Login() {
             />
           </div>
           <Button type="submit">Login</Button>
-          <p className="py-2 sm:py-2.5 text-gray-500 text-sm sm:text-md select-none">
+          {/* <p className="py-2 sm:py-2.5 text-gray-500 text-sm sm:text-md select-none">
             or
           </p>
           <Button
@@ -122,7 +122,7 @@ export default function Login() {
             }
           >
             Continue with Google
-          </Button>
+          </Button> */}
           <p className="text-black/80 mt-3 text-xs sm:text-base text-center select-none">
             Don't have an Account?
             <Link
