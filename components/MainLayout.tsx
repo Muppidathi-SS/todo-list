@@ -46,6 +46,9 @@ export default function MainLayout({
           token: session.token,
         }),
       );
+      if (isAuthPage) {
+        router.replace("/appearance");
+      }
     } else {
       setIsLoggedIn(false);
       setIsChecking(false);
@@ -61,6 +64,9 @@ export default function MainLayout({
   }, [pathname]);
 
   if (isAuthPage) {
+    if (isLoggedIn) {
+      return null;
+    }
     return <>{children}</>;
   }
 

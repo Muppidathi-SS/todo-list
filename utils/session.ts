@@ -41,8 +41,10 @@ export const saveSession = (session: {
     }),
   );
 
-  // Set cookie for Next.js proxy/middleware server-side protection
-  document.cookie = `token=${session.token}; path=/; max-age=3600; SameSite=Lax`;
+  // Set cookie for browser session and server-side compatibility
+  const isSecure =
+    typeof window !== "undefined" && window.location.protocol === "https:";
+  document.cookie = `token=${session.token}; path=/; max-age=3600; SameSite=Lax${isSecure ? "; Secure" : ""}`;
 };
 
 export const getStoredSession = (): StoredSession | null => {
@@ -98,7 +100,9 @@ export const getStoredSession = (): StoredSession | null => {
     typeof document !== "undefined" &&
     !document.cookie.includes("token=")
   ) {
-    document.cookie = `token=${token}; path=/; max-age=3600; SameSite=Lax`;
+    const isSecure =
+      typeof window !== "undefined" && window.location.protocol === "https:";
+    document.cookie = `token=${token}; path=/; max-age=3600; SameSite=Lax${isSecure ? "; Secure" : ""}`;
   }
 
   return {
@@ -118,6 +122,7 @@ export const clearStoredSession = () => {
   localStorage.removeItem("session");
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  document.cookie =
-    "token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  const isSecure =
+    typeof window !== "undefined" && window.location.protocol === "https:";
+  document.cookie = `token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax${isSecure ? "; Secure" : ""}`;
 };
