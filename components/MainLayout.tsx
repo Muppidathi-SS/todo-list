@@ -16,6 +16,7 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [openPopup, setOpenPopup] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -148,16 +149,7 @@ export default function MainLayout({
 
                   <button
                     type="button"
-                    onClick={handleSignUp}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-lg cursor-pointer transition"
-                  >
-                    <PersonAddIcon fontSize="small" />
-                    <span>Sign Up</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleLogout}
+                    onClick={() => setOpenPopup(true)}
                     className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg cursor-pointer transition"
                   >
                     <LogoutIcon fontSize="small" />
@@ -208,6 +200,31 @@ export default function MainLayout({
           {children}
         </main>
       </div>
+      {openPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm">
+            <h2 className="text-lg font-medium mb-3">Logout</h2>
+            <p className="text-gray-500 mb-6">
+              Are you sure you want to Logout
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setOpenPopup(false)}
+                className="px-4 py-2 rounded-md border border-gray-300 cursor-pointer"
+              >
+                No
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-md text-white cursor-pointer"
+                style={{ backgroundColor: "var(--theme-color)" }}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
