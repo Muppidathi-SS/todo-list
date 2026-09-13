@@ -8,14 +8,24 @@ import { Zoom } from "react-toastify";
 
 import { Email, Password } from "@mui/icons-material";
 
+import { useDispatch } from "react-redux";
+
 import { loginUser } from "@/services/auth/auth.service";
-import { LOGIN_EMPTY, LoginData, LoginUser } from "@/services/auth/auth.type";
+import {
+  LOGIN_EMPTY,
+  LoginData,
+  LoginUser,
+  LoginResponse,
+} from "@/services/auth/auth.type";
+import { setSession } from "@/store/sessionSlice";
+import { saveSession } from "@/utils/session";
 import Button from "@/ui/Button";
 import Input from "@/ui/Input";
 import ShowToastify from "@/utils/ShowToastify";
 
 export default function Login() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [loginData, setLoginData] = useState<LoginData>(LOGIN_EMPTY);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,10 +43,14 @@ export default function Login() {
       userPassword: loginData.password,
     };
     try {
-      const data = await loginUser(user);
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-      }
+      const data: LoginResponse = await loginUser(user);
+      const id = data.id || data.user?._id || data.user?.id || "";
+      const name = data.userName || data.user?.userName || "";
+      const email = data.userEmail || data.user?.userEmail || "";
+      const token = data.token || "";
+
+      saveSession({ id, name, email, token });
+      dispatch(setSession({ id, name, email, token }));
       setLoginData(LOGIN_EMPTY);
       ShowToastify({
         message: "Login Success!",

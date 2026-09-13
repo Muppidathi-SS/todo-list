@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { StoreProvider } from "@/store/StoreProvider";
+import { store } from "@/store/store";
+import { clearSession } from "@/store/sessionSlice";
+import { getStoredSession, clearStoredSession } from "@/utils/session";
 import Sidebar from "@/components/Sidebar";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -14,7 +17,8 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isChecking, setIsChecking] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [userName, setUserName] = useState<string>("");
@@ -27,34 +31,39 @@ export default function MainLayout({
     pathname === "/" || pathname === "/login" || pathname === "/register";
 
   useEffect(() => {
-    if (!isLoggedIn && !isAuthPage) {
-      router.push("/login");
+    const session = getStoredSession();
+    if (session) {
+      setIsLoggedIn(true);
+      setUserName(session.name);
+      setUserEmail(session.email);
+      setIsChecking(false);
+    } else {
+      setIsLoggedIn(false);
+      setIsChecking(false);
+      if (!isAuthPage) {
+        router.replace("/login");
+      }
     }
-  }, [isLoggedIn, isAuthPage, router]);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const user = JSON.parse(storedUser);
-        setUserName(user.userName || "");
-        setUserEmail(user.userEmail || "");
-      } catch (e) {}
-    }
-  }, []);
+  }, [pathname, isAuthPage, router]);
 
   useEffect(() => {
     setMobileOpen(false);
     setProfileOpen(false);
   }, [pathname]);
 
-  if (!isLoggedIn || isAuthPage) {
+  if (isAuthPage) {
     return <StoreProvider>{children}</StoreProvider>;
+  }
+
+  if (isChecking || !isLoggedIn) {
+    return null;
   }
 
   const handleLogout = () => {
     setProfileOpen(false);
-    localStorage.removeItem("user");
+    clearStoredSession();
+    store.dispatch(clearSession());
+    setIsLoggedIn(false);
     router.push("/login");
   };
 

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter, usePathname } from "next/navigation";
 import { RootState } from "@/store/store";
+import { clearSession } from "@/store/sessionSlice";
+import { clearStoredSession } from "@/utils/session";
 import { SideTabs, SideTabItem } from "@/constants/navigation";
 import LogoutIcon from "@mui/icons-material/Logout";
 
@@ -14,9 +16,11 @@ interface SidebarProps {
 export default function Sidebar({ onNavigate }: SidebarProps = {}) {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useDispatch();
   const [mounted, setMounted] = useState(false);
   const [userName, setUserName] = useState<string>("");
   const themeColor = useSelector((state: RootState) => state.theme.themeColor);
+  const session = useSelector((state: RootState) => state.session);
 
   useEffect(() => {
     setMounted(true);
@@ -24,7 +28,7 @@ export default function Sidebar({ onNavigate }: SidebarProps = {}) {
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
-        setUserName(user.userName || "");
+        setUserName(user.userName || user.name || "");
       } catch (e) {}
     }
   }, []);
@@ -37,7 +41,8 @@ export default function Sidebar({ onNavigate }: SidebarProps = {}) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    clearStoredSession();
+    dispatch(clearSession());
     onNavigate?.();
     router.push("/login");
   };
@@ -84,10 +89,12 @@ export default function Sidebar({ onNavigate }: SidebarProps = {}) {
               color: "var(--theme-color)",
             }}
           >
-            {userName ? userName.charAt(0) : "U"}
+            {session.name || userName
+              ? (session.name || userName).charAt(0)
+              : "U"}
           </div>
           <span className="text-[17px] font-medium truncate max-w-[120px]">
-            {userName || "User"}
+            {session.name || userName || "User"}
           </span>
         </div>
         <button
