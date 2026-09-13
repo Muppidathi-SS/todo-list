@@ -7,15 +7,27 @@ import { useState } from "react";
 import { Zoom } from "react-toastify";
 
 import { Email, Password } from "@mui/icons-material";
+import HourglassBottomOutlinedIcon from "@mui/icons-material/HourglassBottomOutlined";
+
+import { useDispatch } from "react-redux";
 
 import { loginUser } from "@/services/auth/auth.service";
-import { LOGIN_EMPTY, LoginData, LoginUser } from "@/services/auth/auth.type";
+import {
+  LOGIN_EMPTY,
+  LoginData,
+  LoginUser,
+  LoginResponse,
+} from "@/services/auth/auth.type";
+import { setSession } from "@/store/sessionSlice";
+import { saveSession } from "@/utils/session";
 import Button from "@/ui/Button";
 import Input from "@/ui/Input";
 import ShowToastify from "@/utils/ShowToastify";
 
 export default function Login() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const [loginData, setLoginData] = useState<LoginData>(LOGIN_EMPTY);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,10 +45,15 @@ export default function Login() {
       userPassword: loginData.password,
     };
     try {
-      const data = await loginUser(user);
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-      }
+      setIsLoading(true);
+      const data: LoginResponse = await loginUser(user);
+      const id = data.id || data.user?._id || data.user?.id || "";
+      const name = data.userName || data.user?.userName || "";
+      const email = data.userEmail || data.user?.userEmail || "";
+      const token = data.token || "";
+
+      saveSession({ id, name, email, token });
+      dispatch(setSession({ id, name, email, token }));
       setLoginData(LOGIN_EMPTY);
       ShowToastify({
         message: "Login Success!",
@@ -44,7 +61,7 @@ export default function Login() {
         position: "top-center",
         transition: Zoom,
       });
-      router.push("/appearance");
+      router.push("/add-task");
     } catch (err) {
       ShowToastify({
         message: err instanceof Error ? err.message : "Login Failed!",
@@ -52,6 +69,8 @@ export default function Login() {
         position: "top-center",
         transition: Zoom,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -73,7 +92,9 @@ export default function Login() {
           <div className="w-full flex flex-col items-center justify-center gap-5 mt-5">
             <Input
               name="email"
-              icon={<Email style={{ fontSize: 30, color: "black" }} />}
+              icon={
+                <Email style={{ fontSize: 30, color: "var(--theme-color)" }} />
+              }
               value={loginData.email}
               onChange={handleChange}
               type="email"
@@ -81,7 +102,11 @@ export default function Login() {
             />
             <Input
               name="password"
-              icon={<Password style={{ fontSize: 30, color: "black" }} />}
+              icon={
+                <Password
+                  style={{ fontSize: 30, color: "var(--theme-color)" }}
+                />
+              }
               value={loginData.password}
               onChange={handleChange}
               type="password"
@@ -90,7 +115,7 @@ export default function Login() {
             />
           </div>
           <Button type="submit">Login</Button>
-          <p className="py-2 sm:py-2.5 text-gray-500 text-sm sm:text-md select-none">
+          {/* <p className="py-2 sm:py-2.5 text-gray-500 text-sm sm:text-md select-none">
             or
           </p>
           <Button
@@ -106,18 +131,29 @@ export default function Login() {
             }
           >
             Continue with Google
-          </Button>
+          </Button> */}
           <p className="text-black/80 mt-3 text-xs sm:text-base text-center select-none">
             Don't have an Account?
             <Link
               href="/register"
-              className="font-medium text-black underline cursor-pointer inline-block py-1 touch-manipulation"
+              className="font-medium text-black underline cursor-pointer inline-block py-1 pl-2 touch-manipulation"
             >
               Register
             </Link>
           </p>
         </form>
       </section>
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-sm flex flex-col items-center justify-center gap-3">
+            <HourglassBottomOutlinedIcon
+              className="animate-spin"
+              style={{ fontSize: 44, color: "var(--theme-color)" }}
+            />
+            <h2 className="text-lg font-medium text-gray-800">Loading...</h2>
+          </div>
+        </div>
+      )}
     </>
   );
 }

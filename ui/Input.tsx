@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface InputProps {
-  icon: ReactNode;
+  icon?: ReactNode;
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -20,7 +20,7 @@ export default function Input({
   autoComplete = "off",
 }: InputProps) {
   return (
-    <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg px-3 w-[88%] sm:w-[82%] lg:w-[80%] gap-3 focus-within:border-black focus-within:border-1">
+    <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg px-3 w-full gap-3 focus-within:border-[var(--theme-color)] focus-within:border-1">
       {icon}
 
       <input

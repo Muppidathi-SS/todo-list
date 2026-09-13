@@ -6,6 +6,8 @@ import { useState } from "react";
 
 import { Email, Password, Person } from "@mui/icons-material";
 
+import HourglassBottomOutlinedIcon from "@mui/icons-material/HourglassBottomOutlined";
+
 import Input from "@/ui/Input";
 import Button from "@/ui/Button";
 import { registerUser } from "@/services/auth/auth.service";
@@ -14,6 +16,7 @@ import ShowToastify from "@/utils/ShowToastify";
 import { Bounce, Zoom } from "react-toastify";
 
 export default function Register() {
+  const [isLoading, setIsLoading] = useState(false);
   const [registerData, setRegisterData] =
     useState<RegisterData>(REGISTER_EMPTY);
 
@@ -32,6 +35,7 @@ export default function Register() {
       userEmail: registerData.email,
     };
     try {
+      setIsLoading(true);
       await registerUser(user);
       ShowToastify({
         message: "Registration successful!",
@@ -48,6 +52,7 @@ export default function Register() {
       });
     } finally {
       setRegisterData(REGISTER_EMPTY);
+      setIsLoading(false);
     }
   };
 
@@ -64,7 +69,9 @@ export default function Register() {
           <div className="w-full flex flex-col items-center justify-center gap-3 mt-5">
             <Input
               name="email"
-              icon={<Email style={{ fontSize: 30, color: "black" }} />}
+              icon={
+                <Email style={{ fontSize: 30, color: "var(--theme-color)" }} />
+              }
               value={registerData.email}
               onChange={handleChange}
               type="email"
@@ -72,7 +79,9 @@ export default function Register() {
             />
             <Input
               name="name"
-              icon={<Person style={{ fontSize: 30, color: "black" }} />}
+              icon={
+                <Person style={{ fontSize: 30, color: "var(--theme-color)" }} />
+              }
               value={registerData.name}
               onChange={handleChange}
               type="text"
@@ -80,7 +89,11 @@ export default function Register() {
             />
             <Input
               name="password"
-              icon={<Password style={{ fontSize: 30, color: "black" }} />}
+              icon={
+                <Password
+                  style={{ fontSize: 30, color: "var(--theme-color)" }}
+                />
+              }
               value={registerData.password}
               onChange={handleChange}
               type="password"
@@ -89,7 +102,11 @@ export default function Register() {
             />
             <Input
               name="confirmPassword"
-              icon={<Password style={{ fontSize: 30, color: "black" }} />}
+              icon={
+                <Password
+                  style={{ fontSize: 30, color: "var(--theme-color)" }}
+                />
+              }
               value={registerData.confirmPassword}
               onChange={handleChange}
               type="password"
@@ -98,7 +115,7 @@ export default function Register() {
             />
           </div>
           <Button onClick={handleRegister}>Register</Button>
-          <p className="py-1.5 sm:py-2 text-gray-500 text-xs sm:text-sm select-none">
+          {/* <p className="py-1.5 sm:py-2 text-gray-500 text-xs sm:text-sm select-none">
             or
           </p>
           <Button
@@ -114,18 +131,29 @@ export default function Register() {
             }
           >
             Continue with Google
-          </Button>
+          </Button> */}
           <p className="text-black/80 mt-2.5 sm:mt-3 text-xs sm:text-sm text-center select-none">
             Already have an Account?
             <Link
               href="/login"
-              className="font-medium text-black underline cursor-pointer inline-block py-1 touch-manipulation"
+              className="font-medium text-black underline pl-2 cursor-pointer inline-block py-1 touch-manipulation"
             >
               Login
             </Link>
           </p>
         </div>
       </section>
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-sm flex flex-col items-center justify-center gap-3">
+            <HourglassBottomOutlinedIcon
+              className="animate-spin"
+              style={{ fontSize: 44, color: "var(--theme-color)" }}
+            />
+            <h2 className="text-lg font-medium text-gray-800">Loading...</h2>
+          </div>
+        </div>
+      )}
     </>
   );
 }

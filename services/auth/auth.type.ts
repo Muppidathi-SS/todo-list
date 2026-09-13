@@ -28,6 +28,20 @@ export interface LoginUser {
   userPassword: string;
 }
 
+export interface LoginResponse {
+  message: string;
+  id: string;
+  userName: string;
+  userEmail: string;
+  token: string;
+  user?: {
+    _id?: string;
+    id?: string;
+    userName?: string;
+    userEmail?: string;
+  };
+}
+
 export const LOGIN_EMPTY: LoginData = {
   email: "",
   password: "",

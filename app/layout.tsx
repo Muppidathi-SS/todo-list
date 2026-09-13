@@ -5,6 +5,7 @@ import "@/styles/customStyles.css";
 import "react-toastify/dist/ReactToastify.css";
 import MainLayout from "@/components/MainLayout";
 import { ToastContainer } from "react-toastify";
+import { StoreProvider } from "@/store/StoreProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -38,8 +39,10 @@ export default function RootLayout({
       <body
         className={`${poppins.className} min-h-full flex flex-col font-sans`}
       >
-        <ToastContainer />
-        <MainLayout>{children}</MainLayout>
+        <ToastContainer position="top-center" autoClose={3000} />
+        <StoreProvider>
+          <MainLayout>{children}</MainLayout>
+        </StoreProvider>
       </body>
     </html>
   );
