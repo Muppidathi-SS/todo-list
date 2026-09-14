@@ -32,6 +32,7 @@ export const addTodo = async (
 export const updateTodo = async (
   userId: string,
   todoId: string,
+  taskName:string,
   isCompleted: boolean,
 ) => {
   const response = await fetch(
@@ -42,6 +43,7 @@ export const updateTodo = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        taskName,
         isCompleted,
       }),
     },

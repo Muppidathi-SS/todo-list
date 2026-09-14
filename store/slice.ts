@@ -5,7 +5,7 @@ export interface StoreState {
 }
 
 const initialState: StoreState = {
-  themeColor: "#ff6b4a",
+  themeColor: "#9b0270",
 };
 
 export const storeSlice: Slice<StoreState> = createSlice({
