@@ -24,6 +24,30 @@ export const customSelectStyles: SxProps<Theme> = {
   },
 };
 
+export const customDateSelectStyles: SxProps<Theme> = {
+  fontFamily: "var(--font-poppins)",
+  borderRadius: "24px",
+  color: "#1f2937",
+
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#e5e7eb",
+  },
+
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#d1d5db",
+  },
+
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#d1d5db",
+    borderWidth: "1px",
+  },
+
+  "& .MuiSelect-icon": {
+    color: "#6b7280",
+    transition: "0.2s",
+  },
+};
+
 export const customMenuStyles: SxProps<Theme> = {
   "& .MuiPaper-root": {
     borderRadius: "12px",
