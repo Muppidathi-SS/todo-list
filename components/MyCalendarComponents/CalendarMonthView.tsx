@@ -1,86 +1,129 @@
-export default function CalendarMonthView() {
+import { primaryRowBorder, secondaryRowBorder } from "@/styles/calendarStyles";
+
+const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+type CalendarMonthViewProps = {
+  selectedMonth: string;
+};
+
+export default function CalendaCalendarMonthViewrHeader({
+  selectedMonth,
+}: CalendarMonthViewProps) {
+  const [monthName, year] = selectedMonth.split(" ");
+  const monthNumber = new Date(`${monthName} 1, ${year}`).getMonth();
+  const daysInMonth = new Date(Number(year), monthNumber + 1, 0).getDate();
+  const startingDay = new Date(Number(year), monthNumber, 1).getDay();
+  const weeks = Math.ceil((startingDay + daysInMonth) / 7);
+  const currentMonthDays = [];
+  const previousMonthDays = [];
+  for (let i = startingDay; i > 0; i--) {
+    previousMonthDays.push(
+      new Date(Number(year), monthNumber, 1 - i).getDate(),
+    );
+  }
+  for (let day = 1; day <= daysInMonth; day++) {
+    currentMonthDays.push(day);
+  }
+  const totalDays = [...previousMonthDays, ...currentMonthDays];
+  const remainingDays = weeks * 7 - totalDays.length;
+  for (let i = 1; i <= remainingDays; i++) {
+    totalDays.push(i);
+  }
   return (
-    <>
-      <div className="grid grid-cols-7 grid-rows-5 h-full">
-        {/* Week 1 */}
-        <div className="border-r border-b p-2 text-right text-sm text-gray-400">
-          30
+    <div
+      className="grid grid-cols-7 h-full min-h-0 border border-gray-300 rounded-2xl"
+      style={{
+        gridTemplateRows: `auto repeat(${weeks}, minmax(0, 1fr))`,
+      }}
+    >
+      {DAYS.map((day, index) => (
+        <div
+          key={day}
+          className={`${
+            index === DAYS.length - 1 ? secondaryRowBorder : primaryRowBorder
+          } p-2 text-right text-sm border-gray-300 font-medium`}
+        >
+          {day}
         </div>
+      ))}
 
-        <div className="border-r border-b p-2 text-right text-sm text-gray-400">
-          31
-        </div>
+      {totalDays.map((day, index) => {
+        const isLastColumn = (index + 1) % 7 === 0;
+        const isLastRow = index >= totalDays.length - 7;
 
-        <div className="border-r border-b p-2 text-right text-sm">1</div>
+        const isPreviousMonth = index < startingDay;
 
-        <div className="border-r border-b p-2 text-right text-sm">2</div>
+        const isNextMonth = index >= startingDay + daysInMonth;
 
-        <div className="border-r border-b p-2 text-right text-sm">3</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">4</div>
-
-        <div className="border-b p-2 text-right text-sm">5</div>
-
-        {/* Week 2 */}
-        <div className="border-r border-b p-2 text-right text-sm">6</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">7</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">8</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">9</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">10</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">11</div>
-
-        <div className="border-b p-2 text-right text-sm">12</div>
-
-        {/* Week 3 */}
-        <div className="border-r border-b p-2 text-right text-sm">13</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">14</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">15</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">16</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">17</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">18</div>
-
-        <div className="border-b p-2 text-right text-sm">19</div>
-
-        {/* Week 4 */}
-        <div className="border-r border-b p-2 text-right text-sm">20</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">21</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">22</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">23</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">24</div>
-
-        <div className="border-r border-b p-2 text-right text-sm">25</div>
-
-        <div className="border-b p-2 text-right text-sm">26</div>
-
-        {/* Week 5 */}
-        <div className="border-r p-2 text-right text-sm">27</div>
-
-        <div className="border-r p-2 text-right text-sm">28</div>
-
-        <div className="border-r p-2 text-right text-sm">29</div>
-
-        <div className="border-r p-2 text-right text-sm">30</div>
-
-        <div className="border-r p-2 text-right text-sm text-gray-400">1</div>
-
-        <div className="border-r p-2 text-right text-sm text-gray-400">2</div>
-
-        <div className="p-2 text-right text-sm text-gray-400">3</div>
-      </div>
-    </>
+        return (
+          <div
+            key={index}
+            className={`${
+              isLastRow
+                ? isLastColumn
+                  ? ""
+                  : "border-r"
+                : isLastColumn
+                  ? "border-b"
+                  : "border-r border-b"
+            } p-2 text-right text-sm border-gray-300 ${
+              isPreviousMonth || isNextMonth ? "text-gray-400" : ""
+            }`}
+          >
+            {day}
+            {day === 5 && (
+              <div className="flex flex-col gap-2">
+                <span className="rounded-md text-start bg-[#5244ed] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+                  <span className="rounded-md text-start bg-[#f2415f] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+              </div>
+            )}
+            {day === 6 && (
+              <div className="flex flex-col gap-2">
+                <span className="rounded-md text-start bg-[#f69f08] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+                  <span className="rounded-md text-start bg-[#22c45e] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+              </div>
+            )}
+            {day === 16 && (
+              <div className="flex flex-col gap-2">
+                <span className="rounded-md text-start bg-[#f69f08] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+                  <span className="rounded-md text-start bg-[#22c45e] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+              </div>
+            )}
+            {day === 26 && (
+              <div className="flex flex-col gap-2">
+                <span className="rounded-md text-start bg-[#f69f08] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+                  <span className="rounded-md text-start bg-[#22c45e] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+              </div>
+            )}
+              {day === 27 && (
+              <div className="flex flex-col gap-2">
+                <span className="rounded-md text-start bg-[#f69f08] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+                  <span className="rounded-md text-start bg-[#22c45e] text-white px-2 py-1 text-xs font-medium">
+                  Today
+                </span>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 }
