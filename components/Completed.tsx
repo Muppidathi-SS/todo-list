@@ -14,8 +14,6 @@ export default function Completed() {
   }, []);
 
   const themeColor = useSelector((state: RootState) => state.theme.themeColor);
-  const activeColor = mounted ? themeColor : "#ff6b4a";
-
   return (
     <div className="flex flex-col justify-start items-center py-10 px-5 h-full w-full">
       <div className="w-full">
@@ -38,7 +36,7 @@ export default function Completed() {
               >
                 <div className="relative h-10 w-10">
                   <div className="h-10 w-10 rounded-full bg-red-500 text-white text-[20px] flex justify-center items-center">
-                    M
+                    A
                   </div>
 
                   <CheckCircleIcon
@@ -78,7 +76,7 @@ export default function Completed() {
               >
                 <div className="relative h-10 w-10">
                   <div className="h-10 w-10 rounded-full bg-red-500 text-white text-[20px] flex justify-center items-center">
-                    M
+                    A
                   </div>
 
                   <CheckCircleIcon
@@ -118,7 +116,7 @@ export default function Completed() {
               >
                 <div className="relative h-10 w-10">
                   <div className="h-10 w-10 rounded-full bg-red-500 text-white text-[20px] flex justify-center items-center">
-                    M
+                    A
                   </div>
 
                   <CheckCircleIcon

@@ -1,7 +1,5 @@
-"use client";
-
-import AddBar from "@/components/AddBar";
+import Login from "./login/page";
 
 export default function Home() {
-  return <AddBar />;
+  return <Login/>;
 }

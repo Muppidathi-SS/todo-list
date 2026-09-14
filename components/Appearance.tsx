@@ -149,19 +149,13 @@ export default function Appearance() {
               />
             </div>
           </div>
-          <div className="flex justify-end">
-            <div className="w-50 mt-4">
-              <ColorPaletteModal />
+          {enabled && (
+            <div className="flex justify-end">
+              <div className="w-50 mt-4">
+                <ColorPaletteModal />
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="space-x-2 flex justify-end mt-6">
-          <button className="px-4 py-2 rounded-lg border border-black">
-            Cancel
-          </button>
-          <button className="px-4 py-2 rounded-lg border border-black bg-black text-white">
-            Save Changes
-          </button>
+          )}
         </div>
       </section>
     </>

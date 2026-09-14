@@ -49,24 +49,21 @@ export const customSwitchStyles: SxProps<Theme> = {
     margin: "2px",
     transition: "transform 200ms ease",
 
-    // OFF state
     "& + .MuiSwitch-track": {
       backgroundColor: "#D1D5DB",
       opacity: 1,
     },
 
-    // ON state
     "&.Mui-checked": {
       transform: "translateX(20px)",
       color: "#FFFFFF",
 
       "& + .MuiSwitch-track": {
-        backgroundColor: "black",
-        opacity: 1,
+        backgroundColor: "var(--theme-color) !important",
+        opacity: "1 !important",
       },
     },
 
-    // Disabled state
     "&.Mui-disabled": {
       color: "#9CA3AF",
 
@@ -76,7 +73,6 @@ export const customSwitchStyles: SxProps<Theme> = {
     },
   },
 
-  // Circle
   "& .MuiSwitch-thumb": {
     width: 28,
     height: 28,
@@ -84,7 +80,6 @@ export const customSwitchStyles: SxProps<Theme> = {
     boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)",
   },
 
-  // Background/track
   "& .MuiSwitch-track": {
     borderRadius: "16px",
     backgroundColor: "#39393D",

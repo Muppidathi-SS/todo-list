@@ -17,12 +17,19 @@ export default function ColorPaletteModal() {
     setColor(themeColor);
   }, [themeColor]);
 
-  const activeColor = mounted ? themeColor : "#ff6b4a";
-
   const handleColorChange = (newColor: string) => {
     setColor(newColor);
     dispatch(setThemeColor(newColor));
   };
+
+  if (!mounted) {
+    return (
+      <div className="flex flex-col h-full w-full">
+        <div className="w-full flex justify-center h-56 rounded-lg bg-gray-100 dark:bg-zinc-800" />
+        <div className="flex items-end justify-end gap-2 mt-2 border border-gray-300 dark:border-zinc-600 rounded-md px-3 py-2 bg-gray-50 dark:bg-zinc-700 h-10" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full w-full">
