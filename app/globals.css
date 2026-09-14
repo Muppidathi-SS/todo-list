@@ -8,7 +8,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --theme-color: #ff6b4a;
+  --theme-color: #9b0270;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,24 +24,15 @@ body {
   font-family: var(--font-poppins), sans-serif;
 }
 
-
 ::-webkit-scrollbar {
   width: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: color-mix(
-    in srgb,
-    var(--theme-color) 10%,
-    transparent
-  );
+  background: color-mix(in srgb, var(--theme-color) 10%, transparent);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: color-mix(
-    in srgb,
-    var(--theme-color) 90%,
-    transparent
-  );
+  background: color-mix(in srgb, var(--theme-color) 90%, transparent);
   border-radius: 10px;
 }
