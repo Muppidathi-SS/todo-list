@@ -14,6 +14,7 @@ import { registerUser } from "@/services/auth/auth.service";
 import { REGISTER_EMPTY, RegisterData } from "@/services/auth/auth.type";
 import ShowToastify from "@/utils/ShowToastify";
 import { Bounce, Zoom } from "react-toastify";
+import Loading from "@/ui/Loading";
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
@@ -143,17 +144,7 @@ export default function Register() {
           </p>
         </div>
       </section>
-      {isLoading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-sm flex flex-col items-center justify-center gap-3">
-            <HourglassBottomOutlinedIcon
-              className="animate-spin"
-              style={{ fontSize: 44, color: "var(--theme-color)" }}
-            />
-            <h2 className="text-lg font-medium text-gray-800">Loading...</h2>
-          </div>
-        </div>
-      )}
+      {isLoading && <Loading/>}
     </>
   );
 }
