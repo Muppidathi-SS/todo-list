@@ -18,6 +18,7 @@ import ShowToastify from "@/utils/ShowToastify";
 
 import EditTodo from "./EditTodo";
 import Loading from "@/ui/Loading";
+import { useTaskFilter } from "@/hooks/useTaskFIlter";
 
 export default function AddBar() {
   const session = useSelector((state: RootState) => state.session);
@@ -26,6 +27,7 @@ export default function AddBar() {
   const [openDialogue, setOpenDialogue] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Todo>(TODO_EMPTY);
   const [todos, setTodos] = useState<Todos>(TODOS_EMPTY);
+  const groupedTasks = useTaskFilter(todos);
 
   const fetchTodos = async () => {
     try {
@@ -98,6 +100,13 @@ export default function AddBar() {
     }
   };
 
+  const getLabel = (id: string) => {
+    if (id === "today") return "Today";
+    if (id === "yesterday") return "Yesterday";
+    const [month, day, year] = id.split("_");
+    return `${month.charAt(0).toUpperCase() + month.slice(1)} ${day}, ${year}`;
+  };
+
   useEffect(() => {
     if (session.id) {
       fetchTodos();
@@ -134,7 +143,7 @@ export default function AddBar() {
           <button
             onClick={handleAddTask}
             aria-label="Add task"
-            className="cursor-pointer shrink-0 text-[var(--theme-color)] hover:opacity-80 active:scale-95 transition-transform flex items-center justify-center p-0.5"
+            className="cursor-pointer shrink-0 text-(--theme-color) hover:opacity-80 active:scale-95 transition-transform flex items-center justify-center p-0.5"
           >
             <AddCircle
               sx={{
@@ -145,9 +154,24 @@ export default function AddBar() {
           </button>
         </div>
 
-        <div className="w-full max-w-2xl mt-4 sm:mt-6">
+        <div className="w-full max-w-2xl py-3">
           {todos.length !== 0 ? (
-            <ShowTodos data={todos} onSelecteTodo={handleSelectedTask} />
+            <>
+              {groupedTasks.map((group) => (
+                <div key={group.id}>
+                  <h2
+                    className="font-medium text-xl sm:text-2xl text-center sm:text-left mt-4"
+                    style={{ color: "var(--theme-color)" }}
+                  >
+                    {getLabel(group.id)}
+                  </h2>
+                  <ShowTodos
+                    data={group.tasks}
+                    onSelecteTodo={handleSelectedTask}
+                  />
+                </div>
+              ))}
+            </>
           ) : (
             <NotFound />
           )}
