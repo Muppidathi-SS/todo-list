@@ -84,7 +84,7 @@ export default function Login() {
           <form
             autoComplete="off"
             onSubmit={handleLogin}
-            className="w-full max-w-[400px] sm:max-w-[440px] rounded-2xl lg:max-w-none lg:w-170 flex flex-col justify-center items-center px-4 py-6 sm:py-8 lg:py-12 bg-white my-auto sm:my-0"
+            className="w-full rounded-2xl flex flex-col justify-center items-center px-4 py-6 sm:py-8 lg:py-12 bg-white my-auto sm:my-0"
           >
             <h1 className="text-2xl sm:text-[32px] font-medium text-center">
               Welcome

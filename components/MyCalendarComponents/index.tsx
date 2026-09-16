@@ -6,13 +6,15 @@ import { SelectChangeEvent } from "@mui/material";
 const CALENDAR_VIEWS = ["Month", "Day"];
 export default function MyCalendar() {
   const [view, setView] = useState("Month");
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 8, 1));
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const todayDate = currentDate.getDate();
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.toLocaleString("default", {
       month: "long",
       year: "numeric",
     }),
   );
+  console.log(currentDate);
 
   const handleCalendarViewsChange = (event: SelectChangeEvent) => {
     setView(event.target.value);
@@ -59,7 +61,7 @@ export default function MyCalendar() {
       </div>
 
       <div className="w-full flex-1 min-h-0">
-        <CalendarMonthView selectedMonth={selectedMonth} />
+        <CalendarMonthView selectedMonth={selectedMonth} todayDate={todayDate}/>
       </div>
     </section>
   );
