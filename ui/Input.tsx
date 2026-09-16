@@ -20,7 +20,7 @@ export default function Input({
   autoComplete = "off",
 }: InputProps) {
   return (
-    <div className="flex justify-between items-center border border-gray-300 shadow rounded-lg px-3 w-full gap-3 focus-within:border-[var(--theme-color)] focus-within:border-1">
+    <div className="flex justify-between items-center border-b border-b-gray-300 px-3 w-full gap-3 focus-within:border-b-[var(--theme-color)] focus-within:border-b-1">
       {icon}
 
       <input

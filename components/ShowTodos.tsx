@@ -3,6 +3,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import AccessTimeFilledOutlinedIcon from "@mui/icons-material/AccessTimeFilledOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Todo, Todos } from "@/services/todos/todos.type";
+import { getTimeAgo } from "@/utils/getTimeAgo";
 
 type ShowTodosProps = {
   data: Todos;
@@ -49,7 +50,7 @@ export default function ShowTodos({ data, onSelecteTodo }: ShowTodosProps) {
                 {task.taskName}
               </p>
               <p className="ml-auto text-xs sm:text-sm text-gray-400 dark:text-zinc-500 shrink-0 whitespace-nowrap pl-2">
-                {task.createdAt ? getDate(task.createdAt) : "Just Now"}
+                {getTimeAgo(task.createdAt || "")}
               </p>
             </div>
           );
