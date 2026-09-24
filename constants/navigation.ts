@@ -4,6 +4,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
+import HomeIcon from "@mui/icons-material/Home";
 import { AddCircle, SvgIconComponent } from "@mui/icons-material";
 
 export interface SideTabItem {
@@ -17,6 +18,7 @@ export const SideTabs: SideTabItem[] = [
   // { label: "Today", icon: InsertInvitationIcon, path: "/today" },
   // { label: "Filters", icon: FilterAltIcon, path: "/filters" },
   // { label: "Completed", icon: LibraryAddCheckIcon, path: "/completed" },
+  { label: "Home", icon: HomeIcon, path: "/home" },
   { label: "Add Task", icon: AddCircle, path: "/add-task" },
   { label: "Appearance", icon: ColorLensIcon, path: "/appearance" },
   { label: "Calender", icon: CalendarMonthIcon, path: "/my-calendar" },
