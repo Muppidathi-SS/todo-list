@@ -1,3 +1,4 @@
+import { Todos } from "@/services/todos/todos.type";
 import { primaryRowBorder, secondaryRowBorder } from "@/styles/calendarStyles";
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -5,12 +6,15 @@ const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 type CalendarMonthViewProps = {
   selectedMonth: string;
   todayDate: number;
+  todos: Todos;
 };
 
 export default function CalendaCalendarMonthViewrHeader({
   selectedMonth,
   todayDate,
+  todos,
 }: CalendarMonthViewProps) {
+  console.log("S", selectedMonth);
   const todayMonth = new Date().toLocaleString("default", {
     month: "long",
   });
@@ -36,7 +40,7 @@ export default function CalendaCalendarMonthViewrHeader({
   }
   return (
     <div
-      className="grid grid-cols-7 h-full min-h-0 border border-gray-300 rounded-2xl"
+      className="grid grid-cols-7 h-full min-h-0 border border-gray-300 rounded-2xl overflow-hidden"
       style={{
         gridTemplateRows: `auto repeat(${weeks}, minmax(0, 1fr))`,
       }}
@@ -46,7 +50,7 @@ export default function CalendaCalendarMonthViewrHeader({
           key={day}
           className={`${
             index === DAYS.length - 1 ? secondaryRowBorder : primaryRowBorder
-          } p-2 text-right text-sm border-gray-300 font-medium`}
+          } p-2 text-right text-sm border-gray-300 font-medium bg-[var(--theme-color)]/10`}
         >
           {day}
         </div>
@@ -57,15 +61,20 @@ export default function CalendaCalendarMonthViewrHeader({
         const isLastRow = index >= totalDays.length - 7;
         const isPreviousMonth = index < startingDay;
         const isNextMonth = index >= startingDay + daysInMonth;
-        console.log(
-          "TOD",
-          todayDate,
-          "SelecetdM:",
-          selectedMonth,
-          " ",
-          todayMonth,
-        );
+        const [monthName, year] = selectedMonth.split(" ");
 
+        const selectedMonthNumber = new Date(
+          `${monthName} 1, ${year}`,
+        ).getMonth();
+
+        const dayTodos = todos.filter(
+          (todo) =>
+            todo.createdAt &&
+            new Date(todo.createdAt).getDate() === day &&
+            new Date(todo.createdAt).getMonth() === selectedMonthNumber &&
+            new Date(todo.createdAt).getFullYear() === Number(year),
+        );
+        console.log(dayTodos);
         return (
           <div
             key={index}
@@ -78,7 +87,9 @@ export default function CalendaCalendarMonthViewrHeader({
                   ? "border-b"
                   : "border-r border-b"
             } p-1 text-right text-sm border-gray-300 ${
-              isPreviousMonth || isNextMonth ? "text-gray-400" : ""
+              isPreviousMonth || isNextMonth
+                ? "text-gray-400"
+                : "cursor-pointer hover:bg-blue-50"
             }`}
           >
             <p
@@ -93,55 +104,35 @@ export default function CalendaCalendarMonthViewrHeader({
             >
               {day}
             </p>
-            {day === 5 && (
-              <div className="flex flex-col gap-2 mt-1">
-                <span className="rounded-md text-start bg-[#5244ed] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-                <span className="rounded-md text-start bg-[#f2415f] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-              </div>
-            )}
-            {day === 6 && (
-              <div className="flex flex-col gap-2 mt-2">
-                <span className="rounded-md text-start bg-[#f69f08] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-                <span className="rounded-md text-start bg-[#22c45e] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-              </div>
-            )}
-            {day === 16 && (
-              <div className="flex flex-col gap-2 mt-2">
-                <span className="rounded-md text-start bg-[#f69f08] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-                <span className="rounded-md text-start bg-[#22c45e] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-              </div>
-            )}
-            {day === 26 && (
-              <div className="flex flex-col gap-2 mt-2">
-                <span className="rounded-md text-start bg-[#f69f08] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-                <span className="rounded-md text-start bg-[#22c45e] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-              </div>
-            )}
-            {day === 27 && (
-              <div className="flex flex-col gap-2 mt-2">
-                <span className="rounded-md text-start bg-[#f69f08] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-                <span className="rounded-md text-start bg-[#22c45e] text-white px-2 py-1 text-xs font-medium">
-                  Today
-                </span>
-              </div>
+            {isPreviousMonth || isNextMonth ? null : (
+              <>
+                {dayTodos.slice(0, 1).map((todo) => (
+                  <div key={todo._id} className="flex flex-col gap-3 mt-2">
+                    <p
+                      className={`rounded-md truncate text-start text-white px-2 py-1 text-xs font-medium ${
+                        todo.isCompleted ? "bg-[#22c45e]" : "bg-[#f2415f]"
+                      }`}
+                    >
+                      {todo.taskName}
+                    </p>
+                  </div>
+                ))}
+                {dayTodos.length >= 3 && (
+                  <>
+                    {/* <div className="flex items-center gap-2 mt-2">
+                      <span className="bg-amber-400 rounded-full flex justify-center items-center h-7 w-7 text-white font-semibold text-md">
+                        2+
+                      </span>
+                      <p>More tasks...</p>
+                    </div> */}
+                    <div className="flex flex-col gap-3 mt-2">
+                      <p className="bg-amber-400 rounded-md truncate text-start text-white px-2 py-1 text-xs font-medium">
+                        2+ More tasks...
+                      </p>
+                    </div>
+                  </>
+                )}
+              </>
             )}
           </div>
         );

@@ -1,14 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarHeader from "./CalendarHeader";
 import CalendarMonthView from "./CalendarMonthView";
 import { SelectChangeEvent } from "@mui/material";
 import CalendarDayView from "./CalendarDayView";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { getTodos } from "@/services/todos/todos.service";
+import { Todos, TODOS_EMPTY } from "@/services/todos/todos.type";
 const CALENDAR_VIEWS = ["Month", "Day"];
 
 export default function MyCalendar() {
+  const session = useSelector((state: RootState) => state.session);
   const [view, setView] = useState("Month");
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [todos, setTodos] = useState<Todos>(TODOS_EMPTY);
   const todayDate = currentDate.getDate();
   const [selectedDay, setSelectedDay] = useState(new Date());
   const [selectedMonth, setSelectedMonth] = useState(
@@ -66,6 +72,38 @@ export default function MyCalendar() {
     });
   };
 
+  const fetchTodos = async () => {
+    try {
+      const response = await getTodos(session.id);
+      console.table(response.todos);
+      setTodos(response.todos);
+    } catch (err) {
+      console.error("Failed to fetch todos:", err);
+    }
+  };
+
+  const filtersTodo = () => {
+    const filteredTodos = todos.filter((todo) => {
+      if (!todo.createdAt) return false;
+      const selectedDate = new Date(`1 ${selectedMonth}`);
+      const todoDate = new Date(todo.createdAt);
+      return (
+        todoDate.getMonth() === selectedDate.getMonth() &&
+        todoDate.getFullYear() === selectedDate.getFullYear()
+      );
+    });
+    console.log("TABLE", filteredTodos);
+  };
+
+  useEffect(() => {
+    fetchTodos();
+    filtersTodo();
+  }, []);
+
+  useEffect(() => {
+    filtersTodo();
+  }, [selectedMonth]);
+
   return (
     <section className="h-full w-full flex flex-col gap-2 overflow-hidden">
       <div className="w-full shrink-0">
@@ -86,6 +124,7 @@ export default function MyCalendar() {
           <CalendarMonthView
             selectedMonth={selectedMonth}
             todayDate={todayDate}
+            todos={todos}
           />
         ) : (
           <CalendarDayView />

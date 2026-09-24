@@ -71,12 +71,12 @@ export default function CalendarHeader({
           >
             <ArrowForwardIosOutlinedIcon sx={{ color: "gray", fontSize: 14 }} />
           </button>
-          <div className="flex items-center gap-1 rounded-full border border-[var(--theme-color)]/20 bg-[var(--theme-color)]/10 px-2 py-1 text-xs font-medium text-[var(--theme-color)]">
+          {/* <div className="flex items-center gap-1 rounded-full border border-[var(--theme-color)]/20 bg-[var(--theme-color)]/10 px-2 py-1 text-xs font-medium text-[var(--theme-color)]">
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--theme-color)]" />
             <span>Today</span>
-          </div>
+          </div> */}
         </div>
-        <div className=" flex items-center gap-3">
+        {/* <div className=" flex items-center gap-3">
           <FormControl size="small" sx={{ minWidth: 140 }}>
             <Select
               value={view}
@@ -103,7 +103,7 @@ export default function CalendarHeader({
           <button className="border border-gray-400 rounded-full h-8 w-8 flex justify-center items-center">
             <SearchOutlinedIcon sx={{ color: "gray", fontSize: 14 }} />
           </button>
-        </div>
+        </div> */}
       </div>
     </>
   );
