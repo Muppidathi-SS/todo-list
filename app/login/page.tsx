@@ -24,6 +24,7 @@ import Button from "@/ui/Button";
 import Input from "@/ui/Input";
 import ShowToastify from "@/utils/ShowToastify";
 import Loading from "@/ui/Loading";
+import TodoLogo from "@/public/icons/TodoLogo";
 
 export default function Login() {
   const router = useRouter();
@@ -77,46 +78,50 @@ export default function Login() {
 
   return (
     <>
-      <section className="bg-white min-h-svh lg:h-screen w-full flex flex-col lg:flex-row justify-center items-center px-4 sm:px-6 lg:p-0 lg:gap-20 py-4 sm:py-6 lg:py-0 overflow-y-auto">
-        <form
-          autoComplete="off"
-          onSubmit={handleLogin}
-          className="border border-gray-100 rounded-2xl sm:rounded-xl shadow-xl sm:shadow-2xl w-full max-w-[400px] sm:max-w-[440px] lg:max-w-none lg:w-170 flex flex-col justify-center items-center px-4 py-6 sm:py-8 lg:py-12 bg-white my-auto sm:my-0"
-        >
-          <h1 className="text-2xl sm:text-[32px] font-medium text-center">
-            Welcome
-          </h1>
-          <p className="text-gray-400 text-xs sm:text-base text-center mt-1">
-            Please enter your details to start your day!
-          </p>
+      <section className="min-h-svh lg:h-screen w-full flex flex-col lg:flex-row justify-center px-4 sm:px-6 lg:p-0 lg:gap-20 py-4 sm:py-6 lg:py-0 overflow-y-auto">
+        <div className="flex flex-col justify-start items-center">
+          <TodoLogo height={200} width={200} color="var(--theme-color)" />
+          <form
+            autoComplete="off"
+            onSubmit={handleLogin}
+            className="w-full rounded-2xl flex flex-col justify-center items-center px-4 py-6 sm:py-8 lg:py-12 bg-white my-auto sm:my-0"
+          >
+            <h1 className="text-2xl sm:text-[32px] font-medium text-center">
+              Welcome
+            </h1>
+            <p className="text-gray-400 text-xs sm:text-base text-center mt-1">
+              Please enter your details to start your day!
+            </p>
 
-          <div className="w-full flex flex-col items-center justify-center gap-5 mt-5">
-            <Input
-              name="email"
-              icon={
-                <Email style={{ fontSize: 30, color: "var(--theme-color)" }} />
-              }
-              value={loginData.email}
-              onChange={handleChange}
-              type="email"
-              placeholder="Enter Your email"
-            />
-            <Input
-              name="password"
-              icon={
-                <Password
-                  style={{ fontSize: 30, color: "var(--theme-color)" }}
-                />
-              }
-              value={loginData.password}
-              onChange={handleChange}
-              type="password"
-              placeholder="Enter Your Password"
-              autoComplete="new-password"
-            />
-          </div>
-          <Button type="submit">Login</Button>
-          {/* <p className="py-2 sm:py-2.5 text-gray-500 text-sm sm:text-md select-none">
+            <div className="w-full flex flex-col items-center justify-center gap-5 mt-5">
+              <Input
+                name="email"
+                icon={
+                  <Email
+                    style={{ fontSize: 30, color: "var(--theme-color)" }}
+                  />
+                }
+                value={loginData.email}
+                onChange={handleChange}
+                type="email"
+                placeholder="Enter Your email"
+              />
+              <Input
+                name="password"
+                icon={
+                  <Password
+                    style={{ fontSize: 30, color: "var(--theme-color)" }}
+                  />
+                }
+                value={loginData.password}
+                onChange={handleChange}
+                type="password"
+                placeholder="Enter Your Password"
+                autoComplete="new-password"
+              />
+            </div>
+            <Button type="submit">Login</Button>
+            {/* <p className="py-2 sm:py-2.5 text-gray-500 text-sm sm:text-md select-none">
             or
           </p>
           <Button
@@ -133,18 +138,19 @@ export default function Login() {
           >
             Continue with Google
           </Button> */}
-          <p className="text-black/80 mt-3 text-xs sm:text-base text-center select-none">
-            Don't have an Account?
-            <Link
-              href="/register"
-              className="font-medium text-black underline cursor-pointer inline-block py-1 pl-2 touch-manipulation"
-            >
-              Register
-            </Link>
-          </p>
-        </form>
+            <p className="text-black/80 mt-3 text-xs sm:text-base text-center select-none">
+              Don't have an Account?
+              <Link
+                href="/register"
+                className="font-medium text-black underline cursor-pointer inline-block py-1 pl-2 touch-manipulation"
+              >
+                Register
+              </Link>
+            </p>
+          </form>{" "}
+        </div>
       </section>
-      {isLoading && <Loading/>}
+      {isLoading && <Loading />}
     </>
   );
 }

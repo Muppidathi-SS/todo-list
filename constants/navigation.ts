@@ -15,9 +15,9 @@ export interface SideTabItem {
 export const SideTabs: SideTabItem[] = [
   // { label: "Search", icon: SearchIcon, path: "/task-search" },
   // { label: "Today", icon: InsertInvitationIcon, path: "/today" },
-  // { label: "Upcoming", icon: CalendarMonthIcon, path: "/upcoming" },
   // { label: "Filters", icon: FilterAltIcon, path: "/filters" },
   // { label: "Completed", icon: LibraryAddCheckIcon, path: "/completed" },
   { label: "Add Task", icon: AddCircle, path: "/add-task" },
   { label: "Appearance", icon: ColorLensIcon, path: "/appearance" },
+  { label: "Calender", icon: CalendarMonthIcon, path: "/my-calendar" },
 ];
