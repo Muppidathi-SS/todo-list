@@ -3,6 +3,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import AccessTimeFilledOutlinedIcon from "@mui/icons-material/AccessTimeFilledOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Todo, Todos } from "@/services/todos/todos.type";
+import { getTimeAgo } from "@/utils/getTimeAgo";
 
 type ShowTodosProps = {
   data: Todos;
@@ -20,12 +21,6 @@ export default function ShowTodos({ data, onSelecteTodo }: ShowTodosProps) {
 
   return (
     <>
-      <h2
-        className="font-medium text-xl sm:text-2xl text-center sm:text-left"
-        style={{ color: "var(--theme-color)" }}
-      >
-        Today
-      </h2>
       <div className="w-full flex flex-col gap-3 sm:gap-6 mt-2">
         {data.map((task, index) => {
           return (
@@ -46,7 +41,7 @@ export default function ShowTodos({ data, onSelecteTodo }: ShowTodosProps) {
                 )}
               </div>
               <p
-                className={`font-normal text-sm sm:text-base flex-1 min-w-0 break-words ${
+                className={`font-normal text-sm sm:text-base flex-1 min-w-0 wrap-break-word ${
                   task.isCompleted
                     ? "text-gray-400 dark:text-zinc-500"
                     : "text-gray-800 dark:text-zinc-100"
@@ -55,7 +50,7 @@ export default function ShowTodos({ data, onSelecteTodo }: ShowTodosProps) {
                 {task.taskName}
               </p>
               <p className="ml-auto text-xs sm:text-sm text-gray-400 dark:text-zinc-500 shrink-0 whitespace-nowrap pl-2">
-                {task.createdAt ? getDate(task.createdAt) : "Just Now"}
+                {getTimeAgo(task.createdAt || "")}
               </p>
             </div>
           );
