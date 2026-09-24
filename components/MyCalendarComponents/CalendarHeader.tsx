@@ -14,45 +14,59 @@ import {
   customDateSelectStyles,
 } from "@/styles/customStyles";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useState } from "react";
-import {
-  CalendarMonth,
-  CalendarViewMonth,
-  CalendarViewWeek,
-} from "@mui/icons-material";
+import { CalendarMonth } from "@mui/icons-material";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 const CALENDAR_VIEWS = ["Month", "Day"];
 type CalendarHeaderProps = {
   view: string;
   month: string;
+  day: Date;
   onSelectedNextvMonth: () => void;
   onSelectedPrevMonth: () => void;
+  onSelectedNextDay: () => void;
+  onSelectedPrevDay: () => void;
   onSelectedHandleViewChange: (event: SelectChangeEvent) => void;
 };
 
 export default function CalendarHeader({
   view,
   month,
+  day,
   onSelectedNextvMonth,
   onSelectedPrevMonth,
+  onSelectedNextDay,
+  onSelectedPrevDay,
   onSelectedHandleViewChange,
 }: CalendarHeaderProps) {
+  const handleNext = () => {
+    view === "Month" ? onSelectedNextvMonth() : onSelectedNextDay();
+  };
+
+  const handlePrev = () => {
+    view === "Month" ? onSelectedPrevMonth() : onSelectedPrevDay();
+  };
+
   return (
     <>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button
-            onClick={onSelectedPrevMonth}
+            onClick={handlePrev}
             className="cursor-pointer border border-gray-400 rounded-full h-8 w-8 flex justify-center items-center"
           >
             <ArrowBackIosOutlinedIcon sx={{ color: "gray", fontSize: 14 }} />
           </button>
           <h1 className="font-medium text-[18px] w-[150px] text-center">
-            {/* {month} */}
-            Sep 23, 2026
+            {view === "Month"
+              ? month
+              : day.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
           </h1>
           <button
-            onClick={onSelectedNextvMonth}
+            onClick={handleNext}
             className="cursor-pointer border border-gray-400 rounded-full h-8 w-8 flex justify-center items-center"
           >
             <ArrowForwardIosOutlinedIcon sx={{ color: "gray", fontSize: 14 }} />
@@ -88,7 +102,7 @@ export default function CalendarHeader({
           </button>
           <button className="border border-gray-400 rounded-full h-8 w-8 flex justify-center items-center">
             <SearchOutlinedIcon sx={{ color: "gray", fontSize: 14 }} />
-          </button>{" "}
+          </button>
         </div>
       </div>
     </>

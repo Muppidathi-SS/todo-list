@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function CalendarDayView() {
   return (
     <>
@@ -17,10 +19,13 @@ export default function CalendarDayView() {
             "11 PM",
             "12 PM",
           ].map((time) => (
-            <>
+            <React.Fragment key={time}>
               <div
+                key={time}
                 className={`h-20 text-sm ${
-                  time === "2 PM" ? "text-black font-medium" : "text-gray-400/70"
+                  time === "2 PM"
+                    ? "text-black font-medium"
+                    : "text-gray-400/70"
                 }`}
               >
                 {time}
@@ -49,7 +54,7 @@ export default function CalendarDayView() {
               ) : (
                 <div className="h-20 border-t border-l border-gray-400/30"></div>
               )}
-            </>
+            </React.Fragment>
           ))}
         </div>
       </div>
