@@ -87,7 +87,7 @@ export default function CalendaCalendarMonthViewrHeader({
                 !isNextMonth &&
                 day === todayDate &&
                 selectedMonth.split(" ")[0] === todayMonth
-                  ? "bg-[var(--theme-color)] text-white"
+                  ? "bg-(--theme-color) text-white"
                   : ""
               }`}
             >

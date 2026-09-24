@@ -48,7 +48,8 @@ export default function CalendarHeader({
             <ArrowBackIosOutlinedIcon sx={{ color: "gray", fontSize: 14 }} />
           </button>
           <h1 className="font-medium text-[18px] w-[150px] text-center">
-            {month}
+            {/* {month} */}
+            Sep 23, 2026
           </h1>
           <button
             onClick={onSelectedNextvMonth}

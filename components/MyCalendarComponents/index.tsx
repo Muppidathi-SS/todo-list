@@ -3,6 +3,7 @@ import { useState } from "react";
 import CalendarHeader from "./CalendarHeader";
 import CalendarMonthView from "./CalendarMonthView";
 import { SelectChangeEvent } from "@mui/material";
+import CalendarDayView from "./CalendarDayView";
 const CALENDAR_VIEWS = ["Month", "Day"];
 export default function MyCalendar() {
   const [view, setView] = useState("Month");
@@ -14,7 +15,6 @@ export default function MyCalendar() {
       year: "numeric",
     }),
   );
-  console.log(currentDate);
 
   const handleCalendarViewsChange = (event: SelectChangeEvent) => {
     setView(event.target.value);
@@ -61,7 +61,15 @@ export default function MyCalendar() {
       </div>
 
       <div className="w-full flex-1 min-h-0">
-        <CalendarMonthView selectedMonth={selectedMonth} todayDate={todayDate}/>
+        {view === "Month" ? (
+          <CalendarMonthView
+            selectedMonth={selectedMonth}
+            todayDate={todayDate}
+          />
+        ) : (
+          <CalendarDayView />
+        )}
+
       </div>
     </section>
   );
