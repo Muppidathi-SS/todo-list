@@ -49,3 +49,77 @@ export const TODAY_TASKS = [
     completedTime: "3 Hours ago",
   },
 ];
+
+export const HOME_PAGE_TABLEDATA = [
+  {
+    taskName:
+      "Working on 360 button in Guardrail module Working on 360 button in Guardrail module",
+    status: "Completed",
+    priority: "High",
+    assignee: "Me",
+    createdDate: "29 June 2026",
+  },
+  {
+    taskName: "Implementing Guardrail report generation",
+    status: "Ongoing",
+    priority: "High",
+    assignee: "Me",
+    createdDate: "30 June 2026",
+  },
+  {
+    taskName: "Fixing calendar UI responsiveness",
+    status: "Completed",
+    priority: "Medium",
+    assignee: "John",
+    createdDate: "01 July 2026",
+  },
+  {
+    taskName: "Adding task filter functionality",
+    status: "Ongoing",
+    priority: "Medium",
+    assignee: "Me",
+    createdDate: "02 July 2026",
+  },
+  {
+    taskName: "Testing Guardrail mapping functionality",
+    status: "Completed",
+    priority: "High",
+    assignee: "David",
+    createdDate: "03 July 2026",
+  },
+  {
+    taskName: "Update dashboard statistics",
+    status: "Pending",
+    priority: "Low",
+    assignee: "Me",
+    createdDate: "04 July 2026",
+  },
+  {
+    taskName: "Fix task popup alignment issue",
+    status: "Completed",
+    priority: "Medium",
+    assignee: "Sarah",
+    createdDate: "05 July 2026",
+  },
+  {
+    taskName: "Implement weekly activity chart",
+    status: "Ongoing",
+    priority: "High",
+    assignee: "Me",
+    createdDate: "06 July 2026",
+  },
+  {
+    taskName: "Improve mobile dashboard layout",
+    status: "Pending",
+    priority: "Medium",
+    assignee: "John",
+    createdDate: "07 July 2026",
+  },
+  {
+    taskName: "Review and test task management APIs",
+    status: "Completed",
+    priority: "High",
+    assignee: "Me",
+    createdDate: "08 July 2026",
+  },
+];

@@ -1,8 +1,5 @@
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import VerifiedIcon from "@mui/icons-material/Verified";
-import SyncIcon from "@mui/icons-material/Sync";
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import Table from "@/ui/Table";
+import { Icons } from "@/icons/icon";
 
 const weeklyTasks = [
   { day: "M", tasks: 0 },
@@ -18,20 +15,20 @@ const taskStats = [
   {
     label: "Total Tasks",
     count: 0,
-    icon: <AssignmentTurnedInIcon sx={{ color: "#4648D4" }} />,
+    icon: <Icons.TotalTasksIcon sx={{ color: "#4648D4" }} />,
     iconBg: "#E9EDFF",
   },
   {
     label: "Ongoing Tasks",
     count: 0,
-    icon: <VerifiedIcon sx={{ color: "green" }} />,
-    iconBg: "#bce8d0",
+    icon: <Icons.OngoingTasksIcon sx={{ color: "#fbbf24" }} />,
+    iconBg: "#fff0e0",
   },
   {
     label: "Completed Tasks",
     count: 0,
-    icon: <SyncIcon sx={{ color: "#fbbf24" }} />,
-    iconBg: "#fff0e0",
+    icon: <Icons.CompletedIcon sx={{ color: "green" }} />,
+    iconBg: "#bce8d0",
   },
 ];
 
@@ -82,7 +79,7 @@ export default function Home() {
 
             <span className="border border-[#ff821b] bg-[#ffeada] text-[#ff821b] px-4 py-1 rounded-3xl font-medium flex items-center">
               4-Day Streak
-              <LocalFireDepartmentIcon />
+              <Icons.StreakIcon />
             </span>
           </div>
 
